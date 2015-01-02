@@ -54,7 +54,8 @@ class Icon:
 	def __init__(self, name):
 	  self.name = name
 	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png')
-	  self.bitmap = pygame.transform.scale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
+	  self.originalbitmap = self.originalbitmap.convert_alpha()
+	  self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
 
 
 # Button is a simple tappable screen region.  Each has:
@@ -110,15 +111,17 @@ class Button:
 	  if self.color:
 	    screen.fill(self.color, self.rect)
 	  if self.iconBg:
-	    img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+	    img = pygame.transform.smoothscale(self.iconBg.bitmap, (self.w,self.h))
+	    img.set_alpha(255)
 	    screen.blit(img,
-	      (self.rect[0]+(self.rect[2]-self.iconBg.bitmap.get_width())/2,
-	       self.rect[1]+(self.rect[3]-self.iconBg.bitmap.get_height())/2))
+	      (self.rect[0],
+	       self.rect[1]))
 	  if self.iconFg:
-	    img = pygame.transform.scale(self.iconFg.bitmap, (self.w,self.h))
+	    img = pygame.transform.smoothscale(self.iconFg.bitmap, (self.w,self.h))
+	    img.set_alpha(255)
 	    screen.blit(img,
-	      (self.rect[0]+(self.rect[2]-self.iconFg.bitmap.get_width())/2,
-	       self.rect[1]+(self.rect[3]-self.iconFg.bitmap.get_height())/2))
+	      (self.rect[0],
+	       self.rect[1]))
 
 	def setBg(self, name):
 	  if name is None:
@@ -359,6 +362,13 @@ buttons = [
    Button((  0,  0, 128, 128), bg='adobe_Fw'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='adobe_Id'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='adobe_Ps'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='axialis'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Ai'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Dw'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Fl'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Fw'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Id'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Ps'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='axialis'   , cb=settingCallback, value=-1)
    ],
    
@@ -370,6 +380,10 @@ buttons = [
    Button((  0,  0, 128, 128), bg='firefox'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='flashget'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='foobar'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='chrome'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='dropbox'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='email'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='explorer'   , cb=settingCallback, value=-1),
    ],
    
    #row 3
@@ -380,6 +394,11 @@ buttons = [
    Button((  0,  0, 128, 128), bg='notepad'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='opera'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='safari'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='games'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='googleEarth'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='handbrake'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mediaPlayer'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='notepad'   , cb=settingCallback, value=-1),
    ],
    
    #row 4
@@ -390,6 +409,11 @@ buttons = [
    Button((  0,  0, 128, 128), bg='webcam'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='xbmc'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='safari'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='sonyericsson'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='totalCommander'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='uTorrent'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='vlcPlayer'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='webcam'   , cb=settingCallback, value=-1),
    ],
    
    #row 5
@@ -399,7 +423,12 @@ buttons = [
    Button((  0,  0, 128, 128), bg='adobe_Fw'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='adobe_Id'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='adobe_Ps'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='axialis'   , cb=settingCallback, value=-1)
+   Button((  0,  0, 128, 128), bg='axialis'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Ai'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Dw'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Fl'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Fw'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Id'   , cb=settingCallback, value=-1),
    ],
    
    #row 6
@@ -410,6 +439,7 @@ buttons = [
    Button((  0,  0, 128, 128), bg='firefox'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='flashget'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='foobar'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='chrome'   , cb=settingCallback, value=-1),
    ]
    
 ]
@@ -554,7 +584,11 @@ yuv = bytearray(320 * 240 * 3 / 2)
 # Init pygame and screen
 #os.environ['SDL_VIDEODRIVER']='windlib'
 pygame.init()
-screen = pygame.display.set_mode([800,480])
+screen = pygame.display.set_mode([1280,800])
+screenPrescaled = pygame.Surface((1280,800))
+clock=pygame.time.Clock()
+windoww = pygame.display.Info().current_w
+windowh = pygame.display.Info().current_h
 #pygame.mouse.set_visible(False)
 
 # Init camera and set up default values
@@ -603,112 +637,159 @@ while(True):
     if screenMode >= 3 or screenMode != screenModePrior: break
 
   # Overlay buttons on display and update
-  screen.fill(0)
+  screenPrescaled.fill(0)
   
   lft = 0
   top = 0
   leftpadding = 0
   spacing = 4
-  width = 70
-  height = 70
+  normalheight = 100
+  normalwidth = 100
+  topheight = 87
+  topwidth = 87
+  row2key0w = 100
+  row2key10w = 230
+  row3key0w = 100
+  row3key11w = 130
+  row4key0w = 130
+  row5key0w = 130
+  row6key0w = 130
+  row6key3w = 516
   millis = ((round(time.time() * 1000)) % 1000)
   reverseanimation = (millis > 500)
   millis = millis / 1000
 
   for i,b in enumerate(buttons[9]):
-    lft = leftpadding + (i * (spacing + width))
-    b.rect = ( lft, top, b.rect[2], b.rect[3])
+    lft = leftpadding + (i * (spacing + topwidth))
+    b.rect = ( lft, top, 0, 0)
 
-    if (reverseanimation):
-      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    if reverseanimation:
+      b.w = topwidth + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = topheight + int(pytweening.linear(1.0 - millis ) * 10)      
     else:
-      b.w = width + int(pytweening.linear( (millis )) * 10)
-      b.h = height + int(pytweening.linear((millis )) * 10)
-    b.draw(screen)
+      b.w = topwidth + int(pytweening.linear( (millis )) * 10)
+      b.h = topheight + int(pytweening.linear((millis )) * 10)
+    b.draw(screenPrescaled)
 
     
   # Row 2
-  top = top + height + spacing
-  leftpadding = 0
+  top = top + topheight + spacing
 
   for i,b in enumerate(buttons[10]):
-    lft = leftpadding + (i * (spacing + width))
-    b.rect = ( lft, top, b.rect[2], b.rect[3])
-
-    if (reverseanimation):
-      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    w = normalwidth
+    h = normalheight
+    if i == 0:
+      lft = 0
+      w = row2key0w
+    elif i == 10:
+      w = row2key10w
+      lft = ((i - 1) * (spacing + normalwidth)) + row2key0w + spacing   
     else:
-      b.w = width + int(pytweening.linear( (millis )) * 10)
-      b.h = height + int(pytweening.linear((millis )) * 10)
-    b.draw(screen)   
+      lft = ((i - 1) * (spacing + normalwidth)) + row2key0w + spacing
+      
+    b.rect = ( lft, top, 0, 0)
+    if reverseanimation:
+      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
+    else:
+      b.w = w + int(pytweening.linear( (millis )) * 10)
+      b.h = h + int(pytweening.linear((millis )) * 10)
+    b.draw(screenPrescaled)   
 
   # Row 3
-  top = top + height + spacing
-  leftpadding = 0
+  top = top + normalheight + spacing
 
   for i,b in enumerate(buttons[11]):
-    lft = leftpadding + (i * (spacing + width))
-    b.rect = ( lft, top, b.rect[2], b.rect[3])
-
-    if (reverseanimation):
-      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    w = normalwidth
+    h = normalheight
+    if i == 0:
+      lft = 0
+      w = row3key0w
+    elif i == 11:
+      w = row3key11w
+      lft = ((i - 1) * (spacing + normalwidth)) + row3key0w + spacing   
     else:
-      b.w = width + int(pytweening.linear( (millis )) * 10)
-      b.h = height + int(pytweening.linear((millis )) * 10)
-    b.draw(screen)     
+      lft = ((i - 1) * (spacing + normalwidth)) + row3key0w + spacing
+      
+    b.rect = ( lft, top, 0, 0)
+    if reverseanimation:
+      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
+    else:
+      b.w = w + int(pytweening.linear( (millis )) * 10)
+      b.h = h + int(pytweening.linear((millis )) * 10)
+    b.draw(screenPrescaled)  
 
   # Row 4
-  top = top + height + spacing
-  leftpadding = 0
+  top = top + normalheight + spacing
 
   for i,b in enumerate(buttons[12]):
-    lft = leftpadding + (i * (spacing + width))
-    b.rect = ( lft, top, b.rect[2], b.rect[3])
-
-    if (reverseanimation):
-      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    w = normalwidth
+    h = normalheight
+    if i == 0:
+      lft = 0
+      w = row4key0w
     else:
-      b.w = width + int(pytweening.linear( (millis )) * 10)
-      b.h = height + int(pytweening.linear((millis )) * 10)
-    b.draw(screen)     
+      lft = ((i - 1) * (spacing + normalwidth)) + row4key0w + spacing
+      
+    b.rect = ( lft, top, 0, 0)
+    if reverseanimation:
+      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
+    else:
+      b.w = w + int(pytweening.linear( (millis )) * 10)
+      b.h = h + int(pytweening.linear((millis )) * 10)
+    b.draw(screenPrescaled)  
 
   # Row 5
-  top = top + height + spacing
-  leftpadding = 0
+  top = top + normalheight + spacing
 
   for i,b in enumerate(buttons[13]):
-    lft = leftpadding + (i * (spacing + width))
-    b.rect = ( lft, top, b.rect[2], b.rect[3])
-
-    if (reverseanimation):
-      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    w = normalwidth
+    h = normalheight
+    if i == 0:
+      lft = 0
+      w = row5key0w
     else:
-      b.w = width + int(pytweening.linear( (millis )) * 10)
-      b.h = height + int(pytweening.linear((millis )) * 10)
-    b.draw(screen)     
+      lft = ((i - 1) * (spacing + normalwidth)) + row5key0w + spacing
+      
+    b.rect = ( lft, top, 0, 0)
+    if reverseanimation:
+      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
+    else:
+      b.w = w + int(pytweening.linear( (millis )) * 10)
+      b.h = h + int(pytweening.linear((millis )) * 10)
+    b.draw(screenPrescaled)    
 
   # Row 6
-  top = top + height + spacing
-  leftpadding = 0
+  top = top + normalheight + spacing
 
   for i,b in enumerate(buttons[14]):
-    lft = leftpadding + (i * (spacing + width))
-    b.rect = ( lft, top, b.rect[2], b.rect[3])
-
-    if (reverseanimation):
-      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    w = normalwidth
+    h = normalheight
+    if i == 0:
+      lft = 0
+      w = row6key0w
+    elif i == 3:
+      w = row6key3w
+      lft = ((i - 1) * (spacing + normalwidth)) + row6key0w + spacing
+    elif i > 3:
+      lft = ((i - 2) * (spacing + normalwidth)) + row6key0w + spacing + row6key3w + spacing
     else:
-      b.w = width + int(pytweening.linear( (millis )) * 10)
-      b.h = height + int(pytweening.linear((millis )) * 10)
-    b.draw(screen)     
+      lft = ((i - 1) * (spacing + normalwidth)) + row6key0w + spacing
+      
+    b.rect = ( lft, top, 0, 0)
+    if reverseanimation:
+      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
+    else:
+      b.w = w + int(pytweening.linear( (millis )) * 10)
+      b.h = h + int(pytweening.linear((millis )) * 10)
+    b.draw(screenPrescaled)    
 
+  pygame.transform.smoothscale(screenPrescaled, (windoww, windowh), screen)
   pygame.display.update()
-  time.sleep(0.01)
+  clock.tick(40)
 
   screenModePrior = screenMode
