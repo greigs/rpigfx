@@ -34,6 +34,7 @@ import pygame
 import stat
 import threading
 import time
+import pytweening
 from pygame.locals import *
 from subprocess import call  
 
@@ -359,6 +360,15 @@ buttons = [
    Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1)
+   ],
+   
+   [Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
    Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
    ]
 ]
@@ -503,7 +513,7 @@ yuv = bytearray(320 * 240 * 3 / 2)
 # Init pygame and screen
 #os.environ['SDL_VIDEODRIVER']='windlib'
 pygame.init()
-screen = pygame.display.set_mode([1920,1080])
+screen = pygame.display.set_mode([800,480])
 #pygame.mouse.set_visible(False)
 
 # Init camera and set up default values
@@ -558,15 +568,40 @@ while(True):
   top = 0
   leftpadding = 10
   spacing = 10
-  width = 300
-  height = 128
-  for i,b in enumerate(buttons[screenMode]):
+  width = 100
+  height = 100
+  millis = ((round(time.time() * 1000)) % 1000)
+  reverseanimation = (millis > 500)
+  millis = millis / 1000
+
+  for i,b in enumerate(buttons[9]):
     lft = leftpadding + (i * (spacing + width))
     b.rect = ( lft, top, b.rect[2], b.rect[3])
-    b.w = 128 + framecount % 100;
-    b.h = 128 + framecount % 100;
+
+    if (reverseanimation):
+      b.w = width + int(pytweening.easeInOutSine(1.0 - millis ) * 10)
+      b.h = height + int(pytweening.easeInOutSine(1.0 - millis ) * 10)      
+    else:
+      b.w = width + int(pytweening.easeInOutSine( (millis )) * 10)
+      b.h = height + int(pytweening.easeInOutSine((millis )) * 10)
     b.draw(screen)
-   
+
+    
+  # Row 2
+  top = top + 140
+  leftpadding = 30
+
+  for i,b in enumerate(buttons[10]):
+    lft = leftpadding + (i * (spacing + width))
+    b.rect = ( lft, top, b.rect[2], b.rect[3])
+
+    if (reverseanimation):
+      b.w = width + int(pytweening.easeInOutSine(1.0 - millis ) * 10)
+      b.h = height + int(pytweening.easeInOutSine(1.0 - millis ) * 10)      
+    else:
+      b.w = width + int(pytweening.easeInOutSine( (millis )) * 10)
+      b.h = height + int(pytweening.easeInOutSine((millis )) * 10)
+    b.draw(screen)   
   
 
   pygame.display.update()
