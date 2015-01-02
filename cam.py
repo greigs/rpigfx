@@ -353,7 +353,14 @@ buttons = [
    Button((  0, 10,320, 35), bg='quit')],
    
    
-   [Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1)]
+   [Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   ]
 ]
 
 
@@ -546,10 +553,22 @@ while(True):
 
   # Overlay buttons on display and update
   screen.fill(0)
+  
+  lft = 0
+  top = 0
+  leftpadding = 10
+  spacing = 10
+  width = 300
+  height = 128
   for i,b in enumerate(buttons[screenMode]):
-    b.w = 100 + framecount % 100;
-    b.h = 100 + framecount % 100;
+    lft = leftpadding + (i * (spacing + width))
+    b.rect = ( lft, top, b.rect[2], b.rect[3])
+    b.w = 128 + framecount % 100;
+    b.h = 128 + framecount % 100;
     b.draw(screen)
+   
+  
+
   pygame.display.update()
 
   screenModePrior = screenMode
