@@ -352,24 +352,66 @@ buttons = [
    Button((110, 60,100,120), bg='quit-ok', cb=quitCallback),
    Button((  0, 10,320, 35), bg='quit')],
    
-   
-   [Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1)
+   #row 1
+   [Button((  0,  0, 128, 128), bg='adobe_Ai'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Dw'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Fl'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Fw'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Id'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Ps'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='axialis'   , cb=settingCallback, value=-1)
    ],
    
-   [Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
-   Button((  0,  0, 128, 128), bg='mario'   , cb=settingCallback, value=-1),
+   #row 2
+   [Button((  0,  0, 128, 128), bg='chrome'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='dropbox'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='email'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='explorer'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='firefox'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='flashget'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='foobar'   , cb=settingCallback, value=-1),
+   ],
+   
+   #row 3
+   [Button((  0,  0, 128, 128), bg='games'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='googleEarth'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='handbrake'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='mediaPlayer'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='notepad'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='opera'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='safari'   , cb=settingCallback, value=-1),
+   ],
+   
+   #row 4
+   [Button((  0,  0, 128, 128), bg='sonyericsson'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='totalCommander'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='uTorrent'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='vlcPlayer'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='webcam'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='xbmc'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='safari'   , cb=settingCallback, value=-1),
+   ],
+   
+   #row 5
+   [Button((  0,  0, 128, 128), bg='adobe_Ai'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Dw'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Fl'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Fw'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Id'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='adobe_Ps'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='axialis'   , cb=settingCallback, value=-1)
+   ],
+   
+   #row 6
+   [Button((  0,  0, 128, 128), bg='chrome'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='dropbox'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='email'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='explorer'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='firefox'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='flashget'   , cb=settingCallback, value=-1),
+   Button((  0,  0, 128, 128), bg='foobar'   , cb=settingCallback, value=-1),
    ]
+   
 ]
 
 
@@ -565,10 +607,10 @@ while(True):
   
   lft = 0
   top = 0
-  leftpadding = 10
-  spacing = 10
-  width = 100
-  height = 100
+  leftpadding = 0
+  spacing = 4
+  width = 70
+  height = 70
   millis = ((round(time.time() * 1000)) % 1000)
   reverseanimation = (millis > 500)
   millis = millis / 1000
@@ -578,17 +620,17 @@ while(True):
     b.rect = ( lft, top, b.rect[2], b.rect[3])
 
     if (reverseanimation):
-      b.w = width + int(pytweening.easeInOutElastic(1.0 - millis ) * 10)
-      b.h = height + int(pytweening.easeInOutElastic(1.0 - millis ) * 10)      
+      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
     else:
-      b.w = width + int(pytweening.easeInOutElastic( (millis )) * 10)
-      b.h = height + int(pytweening.easeInOutElastic((millis )) * 10)
+      b.w = width + int(pytweening.linear( (millis )) * 10)
+      b.h = height + int(pytweening.linear((millis )) * 10)
     b.draw(screen)
 
     
   # Row 2
-  top = top + 140
-  leftpadding = 30
+  top = top + height + spacing
+  leftpadding = 0
 
   for i,b in enumerate(buttons[10]):
     lft = leftpadding + (i * (spacing + width))
@@ -601,9 +643,72 @@ while(True):
       b.w = width + int(pytweening.linear( (millis )) * 10)
       b.h = height + int(pytweening.linear((millis )) * 10)
     b.draw(screen)   
-  
+
+  # Row 3
+  top = top + height + spacing
+  leftpadding = 0
+
+  for i,b in enumerate(buttons[11]):
+    lft = leftpadding + (i * (spacing + width))
+    b.rect = ( lft, top, b.rect[2], b.rect[3])
+
+    if (reverseanimation):
+      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    else:
+      b.w = width + int(pytweening.linear( (millis )) * 10)
+      b.h = height + int(pytweening.linear((millis )) * 10)
+    b.draw(screen)     
+
+  # Row 4
+  top = top + height + spacing
+  leftpadding = 0
+
+  for i,b in enumerate(buttons[12]):
+    lft = leftpadding + (i * (spacing + width))
+    b.rect = ( lft, top, b.rect[2], b.rect[3])
+
+    if (reverseanimation):
+      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    else:
+      b.w = width + int(pytweening.linear( (millis )) * 10)
+      b.h = height + int(pytweening.linear((millis )) * 10)
+    b.draw(screen)     
+
+  # Row 5
+  top = top + height + spacing
+  leftpadding = 0
+
+  for i,b in enumerate(buttons[13]):
+    lft = leftpadding + (i * (spacing + width))
+    b.rect = ( lft, top, b.rect[2], b.rect[3])
+
+    if (reverseanimation):
+      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    else:
+      b.w = width + int(pytweening.linear( (millis )) * 10)
+      b.h = height + int(pytweening.linear((millis )) * 10)
+    b.draw(screen)     
+
+  # Row 6
+  top = top + height + spacing
+  leftpadding = 0
+
+  for i,b in enumerate(buttons[14]):
+    lft = leftpadding + (i * (spacing + width))
+    b.rect = ( lft, top, b.rect[2], b.rect[3])
+
+    if (reverseanimation):
+      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
+    else:
+      b.w = width + int(pytweening.linear( (millis )) * 10)
+      b.h = height + int(pytweening.linear((millis )) * 10)
+    b.draw(screen)     
 
   pygame.display.update()
-  time.sleep(0.1)
+  time.sleep(0.01)
 
   screenModePrior = screenMode
