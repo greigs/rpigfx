@@ -29,7 +29,6 @@ import fnmatch
 import io
 import os
 import os.path
-import picamera
 import pygame
 import stat
 import threading
@@ -579,11 +578,11 @@ while(True):
     b.rect = ( lft, top, b.rect[2], b.rect[3])
 
     if (reverseanimation):
-      b.w = width + int(pytweening.easeInOutSine(1.0 - millis ) * 10)
-      b.h = height + int(pytweening.easeInOutSine(1.0 - millis ) * 10)      
+      b.w = width + int(pytweening.easeInOutElastic(1.0 - millis ) * 10)
+      b.h = height + int(pytweening.easeInOutElastic(1.0 - millis ) * 10)      
     else:
-      b.w = width + int(pytweening.easeInOutSine( (millis )) * 10)
-      b.h = height + int(pytweening.easeInOutSine((millis )) * 10)
+      b.w = width + int(pytweening.easeInOutElastic( (millis )) * 10)
+      b.h = height + int(pytweening.easeInOutElastic((millis )) * 10)
     b.draw(screen)
 
     
@@ -596,14 +595,15 @@ while(True):
     b.rect = ( lft, top, b.rect[2], b.rect[3])
 
     if (reverseanimation):
-      b.w = width + int(pytweening.easeInOutSine(1.0 - millis ) * 10)
-      b.h = height + int(pytweening.easeInOutSine(1.0 - millis ) * 10)      
+      b.w = width + int(pytweening.linear(1.0 - millis ) * 10)
+      b.h = height + int(pytweening.linear(1.0 - millis ) * 10)      
     else:
-      b.w = width + int(pytweening.easeInOutSine( (millis )) * 10)
-      b.h = height + int(pytweening.easeInOutSine((millis )) * 10)
+      b.w = width + int(pytweening.linear( (millis )) * 10)
+      b.h = height + int(pytweening.linear((millis )) * 10)
     b.draw(screen)   
   
 
   pygame.display.update()
+  time.sleep(0.1)
 
   screenModePrior = screenMode
