@@ -27,7 +27,7 @@ class Icon:
 	def __init__(self, name):
 	  self.name = name
 	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png')
-	  self.originalbitmap = self.originalbitmap.convert(24)
+	  self.originalbitmap = self.originalbitmap.convert_alpha()
 	  self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
 
 
@@ -271,7 +271,7 @@ def spinner():
 
 # Init framebuffer/touchscreen environment variables
 #os.putenv('SDL_VIDEODRIVER', 'windlib')
-#os.putenv('SDL_FBDEV'      , '/dev/fb1')
+os.putenv('SDL_FBDEV'      , '/dev/fb1')
 #os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
 #os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
 
@@ -283,11 +283,11 @@ def spinner():
 #gid = int(s) 
 
 # Init pygame and screen
-#os.environ['SDL_VIDEODRIVER']='windlib'
+os.environ['SDL_VIDEODRIVER']='fbcon'
 pygame.init()
 pygame.mixer.quit()
 screen = pygame.display.set_mode((320,240))
-screenPrescaled = pygame.Surface((320,240)).convert()
+screenPrescaled = pygame.Surface((320,240), flags=0, depth=24)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
