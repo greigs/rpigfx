@@ -27,7 +27,6 @@ class Icon:
 	def __init__(self, name):
 	  self.name = name
 	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png')
-	  self.originalbitmap = self.originalbitmap
 	  self.bitmap = pygame.transform.scale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
 
 
@@ -151,7 +150,7 @@ buttons = [
    Button((  0,  0, 128, 128), bg='adobe_Fw'),
    Button((  0,  0, 128, 128), bg='adobe_Id'),
    Button((  0,  0, 128, 128), bg='adobe_Ps'),
-   Button((  0,  0, 128, 128), bg='axialis'	)
+   Button((  0,  0, 128, 128), bg='axialis')
    ],
    
    #row 2
@@ -289,7 +288,7 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
+screen = pygame.display.set_mode(size,pygame.HWSURFACE,16)
 screenPrescaled = pygame.Surface((1280,800), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
@@ -489,6 +488,6 @@ while(True):
 
   pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
   pygame.display.update()
-  #clock.tick(40)
+  clock.tick(10)
 
   screenModePrior = screenMode
