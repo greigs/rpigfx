@@ -27,7 +27,7 @@ class Icon:
 	def __init__(self, name):
 	  self.name = name
 	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png')
-	  self.bitmap = pygame.transform.scale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
+	  self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
 
 
 # Button is a simple tappable screen region.  Each has:
@@ -83,13 +83,13 @@ class Button:
 	  if self.color:
 	    screen.fill(self.color, self.rect)
 	  if self.iconBg:
-	    img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+	    img = pygame.transform.smoothscale(self.iconBg.bitmap, (self.w,self.h))
 	    #img.set_alpha(255)
 	    screen.blit(img,
 	      (self.rect[0],
 	       self.rect[1]))
 	  if self.iconFg:
-	    img = pygame.transform.scale(self.iconFg.bitmap, (self.w,self.h))
+	    img = pygame.transform.smoothscale(self.iconFg.bitmap, (self.w,self.h))
 	    #img.set_alpha(255)
 	    screen.blit(img,
 	      (self.rect[0],
@@ -288,8 +288,8 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
-screenPrescaled = pygame.Surface((980,612), flags=pygame.HWSURFACE, depth=16)
+screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,24)
+screenPrescaled = pygame.Surface((980,612), flags=pygame.HWSURFACE, depth=24)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
@@ -486,7 +486,7 @@ while(True):
       b.h = h + int(pytweening.linear((millis )) * 10)
     b.draw(screenPrescaled)    
 
-  pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
+  pygame.transform.smoothscale(screenPrescaled, (windoww, windowh), screen)
   pygame.display.update()
   clock.tick(10)
 
