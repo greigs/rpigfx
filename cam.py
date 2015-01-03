@@ -27,8 +27,8 @@ class Icon:
 	def __init__(self, name):
 	  self.name = name
 	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png')
-	  self.originalbitmap = self.originalbitmap.convert_alpha()
-	  self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
+	  self.originalbitmap = self.originalbitmap
+	  self.bitmap = pygame.transform.scale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
 
 
 # Button is a simple tappable screen region.  Each has:
@@ -84,7 +84,7 @@ class Button:
 	  if self.color:
 	    screen.fill(self.color, self.rect)
 	  if self.iconBg:
-	    img = pygame.transform.smoothscale(self.iconBg.bitmap, (self.w,self.h))
+	    img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
 	    #img.set_alpha(255)
 	    screen.blit(img,
 	      (self.rect[0],
@@ -289,8 +289,8 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-screen = pygame.display.set_mode(size,pygame.FULLSCREEN|pygame.HWSURFACE,24)
-screenPrescaled = pygame.Surface((1280,800), flags=0, depth=24)
+screen = pygame.display.set_mode(size,0,16)
+screenPrescaled = pygame.Surface((1280,800), flags=0, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
