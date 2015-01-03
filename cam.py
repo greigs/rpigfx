@@ -271,7 +271,7 @@ def spinner():
 
 # Init framebuffer/touchscreen environment variables
 #os.putenv('SDL_VIDEODRIVER', 'windlib')
-os.putenv('SDL_FBDEV'      , '/dev/fb1')
+#os.putenv('SDL_FBDEV'      , '/dev/fb0')
 #os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
 #os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
 
@@ -283,10 +283,10 @@ os.putenv('SDL_FBDEV'      , '/dev/fb1')
 #gid = int(s) 
 
 # Init pygame and screen
-os.environ['SDL_VIDEODRIVER']='fbcon'
+#os.environ['SDL_VIDEODRIVER']='fbcon'
 pygame.init()
 pygame.mixer.quit()
-screen = pygame.display.set_mode((320,240))
+screen = pygame.display.set_mode((640,480),pygame.FULLSCREEN)
 screenPrescaled = pygame.Surface((320,240), flags=0, depth=24)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
