@@ -270,9 +270,9 @@ def spinner():
 
 # Init framebuffer/touchscreen environment variables
 #os.putenv('SDL_VIDEODRIVER', 'windlib')
-os.putenv('SDL_FBDEV'      , '/dev/fb1')
-os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
-os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
+#os.putenv('SDL_FBDEV'      , '/dev/fb1')
+#os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
+#os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
 
 # Get user & group IDs for file & folder creation
 # (Want these to be 'pi' or other user, not root)
@@ -284,6 +284,7 @@ s = os.getenv("SUDO_GID")
 # Init pygame and screen
 #os.environ['SDL_VIDEODRIVER']='windlib'
 pygame.init()
+pygame.mixer.quit()
 screen = pygame.display.set_mode([320,240])
 screenPrescaled = pygame.Surface((1280,800)).convert_alpha()
 clock=pygame.time.Clock()
