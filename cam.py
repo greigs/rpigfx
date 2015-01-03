@@ -284,8 +284,8 @@ s = os.getenv("SUDO_GID")
 # Init pygame and screen
 #os.environ['SDL_VIDEODRIVER']='windlib'
 pygame.init()
-screen = pygame.display.set_mode([1280,800])
-screenPrescaled = pygame.Surface((1280,800))
+screen = pygame.display.set_mode([320,240])
+screenPrescaled = pygame.Surface((1280,800)).convert_alpha()
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
