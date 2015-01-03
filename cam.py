@@ -289,8 +289,8 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-screen = pygame.display.set_mode(size,0,16)
-screenPrescaled = pygame.Surface((1280,800), flags=0, depth=16)
+screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
+screenPrescaled = pygame.Surface((1280,800), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
