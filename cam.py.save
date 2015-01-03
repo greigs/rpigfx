@@ -29,7 +29,7 @@ class Icon:
 	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png')
 	  self.originalbitmap = self.originalbitmap.convert_alpha()
 	  self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
-
+(640,480),pygame.FULLSCREEN|pygame.HWSURFACE,32(640,480),pygame.FULLSCREEN|pygame.HWSURFACE,32(640,480),pygame.FULLSCREEN|pygame.HWSURFACE,32
 
 # Button is a simple tappable screen region.  Each has:
 #  - bounding rect ((X,Y,W,H) in pixels)
@@ -90,7 +90,7 @@ class Button:
 	      (self.rect[0],
 	       self.rect[1]))
 	  if self.iconFg:
-	    img = pygame.transform.scale(self.iconFg.bitmap, (self.w,self.h))
+	    img = pygame.transform.smoothscale(self.iconFg.bitmap, (self.w,self.h))
 	    #img.set_alpha(255)
 	    screen.blit(img,
 	      (self.rect[0],
@@ -284,13 +284,13 @@ def spinner():
 
 # Init pygame and screen
 
-#os.putenv('SDL_VIDEODRIVER', 'fbcon')
+os.putenv('SDL_VIDEODRIVER', 'fbcon')
 pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-screen = pygame.display.set_mode(size,pygame.FULLSCREEN|pygame.HWSURFACE,24)
-screenPrescaled = pygame.Surface((1280,800), flags=0, depth=24)
+screen = pygame.display.set_mode((0,0),0,32)
+screenPrescaled = pygame.Surface((1280,800), flags=0, depth=32)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
@@ -487,8 +487,8 @@ while(True):
       b.h = h + int(pytweening.linear((millis )) * 10)
     b.draw(screenPrescaled)    
 
-  pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
+  pygame.transform.smoothscale(screenPrescaled, (windoww, windowh), screen)
   pygame.display.update()
-  #clock.tick(40)
+  clock.tick(40)
 
   screenModePrior = screenMode
