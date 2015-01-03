@@ -276,9 +276,9 @@ def spinner():
 
 # Get user & group IDs for file & folder creation
 # (Want these to be 'pi' or other user, not root)
-s = os.getenv("SUDO_UID")
+#s = os.getenv("SUDO_UID")
 #uid = int(s)
-s = os.getenv("SUDO_GID")
+#s = os.getenv("SUDO_GID")
 #gid = int(s) 
 
 # Init pygame and screen
@@ -286,7 +286,7 @@ s = os.getenv("SUDO_GID")
 pygame.init()
 pygame.mixer.quit()
 screen = pygame.display.set_mode([320,240])
-screenPrescaled = pygame.Surface((640,480)).convert_alpha()
+screenPrescaled = pygame.Surface((320,240)).convert_alpha()
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
