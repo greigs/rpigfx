@@ -1,0 +1,10 @@
+######## very simple particle effect in python
+######## with pygame www.pygame.org
+######## by odrez
+___________________________________________________
+
+feel free to implement, edit or republish this code
+
+give me credit if you want or visit me
+
+www.buntrais.de
