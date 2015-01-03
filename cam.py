@@ -284,13 +284,13 @@ def spinner():
 
 # Init pygame and screen
 
-os.putenv('SDL_VIDEODRIVER', 'fbcon')
+#os.putenv('SDL_VIDEODRIVER', 'fbcon')
 pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
 screen = pygame.display.set_mode(size,pygame.FULLSCREEN)
-screenPrescaled = pygame.Surface((640,480), flags=0, depth=24)
+screenPrescaled = pygame.Surface((640,480), flags=0, depth=32)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
