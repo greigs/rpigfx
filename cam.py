@@ -290,7 +290,7 @@ size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
 screen = pygame.display.set_mode((0,0),0,32)
-screenPrescaled = pygame.Surface((640,480), flags=0, depth=32)
+screenPrescaled = pygame.Surface((1280,800), flags=0, depth=32)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
