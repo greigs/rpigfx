@@ -9,6 +9,7 @@ import pygame
 import stat
 import threading
 import time
+import sys
 import pytweening
 from pygame.locals import *
 from subprocess import call  
@@ -26,7 +27,7 @@ class Icon:
 	def __init__(self, name):
 	  self.name = name
 	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png')
-	  self.originalbitmap = self.originalbitmap.convert_alpha()
+	  self.originalbitmap = self.originalbitmap.convert(24)
 	  self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
 
 
@@ -285,8 +286,8 @@ def spinner():
 #os.environ['SDL_VIDEODRIVER']='windlib'
 pygame.init()
 pygame.mixer.quit()
-screen = pygame.display.set_mode([320,240])
-screenPrescaled = pygame.Surface((320,240)).convert_alpha()
+screen = pygame.display.set_mode((320,240))
+screenPrescaled = pygame.Surface((320,240)).convert()
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
@@ -320,9 +321,11 @@ while(True):
     for event in pygame.event.get():
       if(event.type is KEYDOWN):
         key = pygame.key.get_pressed()
-        pos = pygame.mouse.get_pos()
-        for b in buttons[screenMode]:
-          if b.selected(pos): break
+        pygame.quit()
+        sys.exit()
+        #pos = pygame.mouse.get_pos()
+        #for b in buttons[screenMode]:
+          #if b.selected(pos): break
     # If in viewfinder or settings modes, stop processing touchscreen
     # and refresh the display to show the live preview.  In other modes
     # (image playback, etc.), stop and refresh the screen only when
