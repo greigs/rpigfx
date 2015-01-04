@@ -49,8 +49,7 @@ class Icon:
 
 class Button:
 
-	def __init__(self, rect, **kwargs):
-	  self.rect     = rect # Bounds
+	def __init__(self, **kwargs):
 	  self.key      = None # the key
 	  self.color    = None # Background fill color, if any
 	  self.iconBg   = None # Background Icon (atop color fill)
@@ -89,7 +88,7 @@ class Button:
 	    screen.fill(self.color, self.rect)
 	  if self.iconBg:
 	    if self.staticBg is None:
-	      self.staticBg = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+	      self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
 	    if self.animating:
 	      img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
 	    else:
@@ -148,90 +147,90 @@ icons = [] # This list gets populated at startup
 
 buttons = [
    #row 1
-   [Button((  0,  0, 128, 128), bg='adobe_Ai'),
-   Button((  0,  0, 128, 128), bg='adobe_Dw'),
-   Button((  0,  0, 128, 128), bg='adobe_Fl'),
-   Button((  0,  0, 128, 128), bg='adobe_Fw'),
-   Button((  0,  0, 128, 128), bg='adobe_Id'),
-   Button((  0,  0, 128, 128), bg='adobe_Ps'),
-   Button((  0,  0, 128, 128), bg='axialis'),
-   Button((  0,  0, 128, 128), bg='adobe_Ai'),
-   Button((  0,  0, 128, 128), bg='adobe_Dw'),
-   Button((  0,  0, 128, 128), bg='adobe_Fl'),
-   Button((  0,  0, 128, 128), bg='adobe_Fw'),
-   Button((  0,  0, 128, 128), bg='adobe_Id'),
-   Button((  0,  0, 128, 128), bg='adobe_Ps'),
-   Button((  0,  0, 128, 128), bg='axialis')
+   [Button( bg='adobe_Ai'),
+   Button( bg='adobe_Dw'),
+   Button( bg='adobe_Fl'),
+   Button( bg='adobe_Fw'),
+   Button( bg='adobe_Id'),
+   Button( bg='adobe_Ps'),
+   Button( bg='axialis'),
+   Button( bg='adobe_Ai'),
+   Button( bg='adobe_Dw'),
+   Button( bg='adobe_Fl'),
+   Button( bg='adobe_Fw'),
+   Button( bg='adobe_Id'),
+   Button( bg='adobe_Ps'),
+   Button( bg='axialis')
    ],
    
    #row 2
-   [Button((  0,  0, 128, 128), bg='chrome'),
-   Button((  0,  0, 128, 128), bg='dropbox', key=pygame.K_q),
-   Button((  0,  0, 128, 128), bg='email', key=pygame.K_w),
-   Button((  0,  0, 128, 128), bg='explorer', key=pygame.K_e),
-   Button((  0,  0, 128, 128), bg='firefox', key=pygame.K_r),
-   Button((  0,  0, 128, 128), bg='flashget', key=pygame.K_t),
-   Button((  0,  0, 128, 128), bg='foobar', key=pygame.K_y),
-   Button((  0,  0, 128, 128), bg='chrome'),
-   Button((  0,  0, 128, 128), bg='dropbox'),
-   Button((  0,  0, 128, 128), bg='email'),
-   Button((  0,  0, 128, 128), bg='explorer'),
+   [Button( bg='chrome'),
+   Button( bg='dropbox', key=pygame.K_1),
+   Button( bg='email', key=pygame.K_2),
+   Button( bg='explorer', key=pygame.K_3),
+   Button( bg='firefox', key=pygame.K_4),
+   Button( bg='flashget', key=pygame.K_5),
+   Button( bg='foobar', key=pygame.K_6),
+   Button( bg='chrome', key=pygame.K_7),
+   Button( bg='dropbox', key=pygame.K_8),
+   Button( bg='email', key=pygame.K_9),
+   Button( bg='explorer', key=pygame.K_0),
    ],
    
    #row 3
-   [Button((  0,  0, 128, 128), bg='games'),
-   Button((  0,  0, 128, 128), bg='googleEarth'),
-   Button((  0,  0, 128, 128), bg='handbrake'),
-   Button((  0,  0, 128, 128), bg='mediaPlayer'),
-   Button((  0,  0, 128, 128), bg='notepad'),
-   Button((  0,  0, 128, 128), bg='opera'),
-   Button((  0,  0, 128, 128), bg='safari'),
-   Button((  0,  0, 128, 128), bg='games'),
-   Button((  0,  0, 128, 128), bg='googleEarth'),
-   Button((  0,  0, 128, 128), bg='handbrake'),
-   Button((  0,  0, 128, 128), bg='mediaPlayer'),
-   Button((  0,  0, 128, 128), bg='notepad'),
+   [Button( bg='games'),
+   Button( bg='googleEarth', key=pygame.K_q),
+   Button( bg='handbrake', key=pygame.K_w),
+   Button( bg='mediaPlayer', key=pygame.K_e),
+   Button( bg='notepad', key=pygame.K_r),
+   Button( bg='opera', key=pygame.K_t),
+   Button( bg='safari', key=pygame.K_y),
+   Button( bg='games', key=pygame.K_u),
+   Button( bg='googleEarth', key=pygame.K_i),
+   Button( bg='handbrake', key=pygame.K_o),
+   Button( bg='mediaPlayer', key=pygame.K_p),
+   Button( bg='notepad'),
    ],
    
    #row 4
-   [Button((  0,  0, 128, 128), bg='sonyericsson'),
-   Button((  0,  0, 128, 128), bg='totalCommander'),
-   Button((  0,  0, 128, 128), bg='uTorrent'),
-   Button((  0,  0, 128, 128), bg='vlcPlayer'),
-   Button((  0,  0, 128, 128), bg='webcam'),
-   Button((  0,  0, 128, 128), bg='xbmc'),
-   Button((  0,  0, 128, 128), bg='safari'),
-   Button((  0,  0, 128, 128), bg='sonyericsson'),
-   Button((  0,  0, 128, 128), bg='totalCommander'),
-   Button((  0,  0, 128, 128), bg='uTorrent'),
-   Button((  0,  0, 128, 128), bg='vlcPlayer'),
-   Button((  0,  0, 128, 128), bg='webcam'),
+   [Button( bg='sonyericsson'),
+   Button( bg='totalCommander', key=pygame.K_a),
+   Button( bg='uTorrent', key=pygame.K_s),
+   Button( bg='vlcPlayer', key=pygame.K_d),
+   Button( bg='webcam', key=pygame.K_f),
+   Button( bg='xbmc', key=pygame.K_g),
+   Button( bg='safari', key=pygame.K_h),
+   Button( bg='sonyericsson', key=pygame.K_j),
+   Button( bg='totalCommander', key=pygame.K_k),
+   Button( bg='uTorrent', key=pygame.K_l),
+   Button( bg='vlcPlayer'),
+   Button( bg='webcam',),
    ],
    
    #row 5
-   [Button((  0,  0, 128, 128), bg='adobe_Ai'),
-   Button((  0,  0, 128, 128), bg='adobe_Dw'),
-   Button((  0,  0, 128, 128), bg='adobe_Fl'),
-   Button((  0,  0, 128, 128), bg='adobe_Fw'),
-   Button((  0,  0, 128, 128), bg='adobe_Id'),
-   Button((  0,  0, 128, 128), bg='adobe_Ps'),
-   Button((  0,  0, 128, 128), bg='axialis'),
-   Button((  0,  0, 128, 128), bg='adobe_Ai'),
-   Button((  0,  0, 128, 128), bg='adobe_Dw'),
-   Button((  0,  0, 128, 128), bg='adobe_Fl'),
-   Button((  0,  0, 128, 128), bg='adobe_Fw'),
-   Button((  0,  0, 128, 128), bg='adobe_Id'),
+   [Button( bg='adobe_Ai'),
+   Button( bg='adobe_Dw', key=pygame.K_z),
+   Button( bg='adobe_Fl', key=pygame.K_x),
+   Button( bg='adobe_Fw', key=pygame.K_c),
+   Button( bg='adobe_Id', key=pygame.K_v),
+   Button( bg='adobe_Ps', key=pygame.K_b),
+   Button( bg='axialis', key=pygame.K_n),
+   Button( bg='adobe_Ai', key=pygame.K_m),
+   Button( bg='adobe_Dw'),
+   Button( bg='adobe_Fl'),
+   Button( bg='adobe_Fw'),
+   Button( bg='adobe_Id'),
    ],
    
    #row 6
-   [Button((  0,  0, 128, 128), bg='chrome'),
-   Button((  0,  0, 128, 128), bg='dropbox'),
-   Button((  0,  0, 128, 128), bg='email'),
-   Button((  0,  0, 128, 128), bg='explorer'),
-   Button((  0,  0, 128, 128), bg='firefox'),
-   Button((  0,  0, 128, 128), bg='flashget'),
-   Button((  0,  0, 128, 128), bg='foobar'),
-   Button((  0,  0, 128, 128), bg='chrome'),
+   [Button( bg='chrome'),
+   Button( bg='dropbox'),
+   Button( bg='email'),
+   Button( bg='explorer'),
+   Button( bg='firefox'),
+   Button( bg='flashget'),
+   Button( bg='foobar'),
+   Button( bg='chrome'),
    ]
    
 ]
@@ -297,16 +296,18 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
-#screen = pygame.display.set_mode((800,480),pygame.HWSURFACE,16)
+if pygame.display.Info().current_h == 480:
+  screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
+else:
+  screen = pygame.display.set_mode((800,480),pygame.HWSURFACE,16)
 screenPrescaled = screen
 #screenPrescaled = pygame.Surface((800, 480), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
-#pygame.mouse.set_visible(False)
+pygame.mouse.set_visible(False)
 font = pygame.font.SysFont('mono', 24, bold=True)
-
+pygame.display.set_caption('')
 
 
 # Load all icons at startup.
@@ -329,7 +330,7 @@ for s in buttons:        # For each screenful of buttons...
 # Main loop ----------------------------------------------------------------
 framecount = 0
 # Desired framerate in frames per second. Try out other values.              
-FPS = 20
+FPS = 60
 # How many seconds the "game" is played.
 playtime = 0.0
 while(True):
@@ -339,22 +340,13 @@ while(True):
   keys = None
 
   framecount = framecount + 1
-  # Process touchscreen input
-  while True:
-    for event in pygame.event.get():
-      if(event.type is KEYDOWN):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_x]:
-          pygame.quit()
-          sys.exit()
-        #pos = pygame.mouse.get_pos()
-        #for b in buttons[screenMode]:
-          #if b.selected(pos): break
-    # If in viewfinder or settings modes, stop processing touchscreen
-    # and refresh the display to show the live preview.  In other modes
-    # (image playback, etc.), stop and refresh the screen only when
-    # screenMode changes.
-    if screenMode >= 3 or screenMode != screenModePrior: break
+
+  for event in pygame.event.get():
+    if(event.type is KEYDOWN):
+      keys = pygame.key.get_pressed()
+      if keys[pygame.K_ESCAPE]:
+        pygame.quit()
+        sys.exit()
 
   
   keys = pygame.key.get_pressed()
@@ -365,18 +357,18 @@ while(True):
   top = 0
   leftpadding = 0
   spacing = 2 
-  normalheight = 82 
-  normalwidth = 82 
-  topheight = 56
-  topwidth = 56
-  row2key0w = 82
-  row2key10w = 180
-  row3key0w = 82
+  normalheight = 79
+  normalwidth = 79 
+  topheight = 70
+  topwidth = 70
+  row2key0w = 79
+  row2key10w = 190
+  row3key0w = 79
   row3key11w = 110 
   row4key0w = 110 
   row5key0w = 110 
   row6key0w = 110 
-  row6key3w = 480 
+  row6key3w = 403 
   millis = ((round(time.time() * 1000)) % 1000)
   reverseanimation = (millis > 500)
   millis = millis / 1000
@@ -489,10 +481,7 @@ while(True):
   for i,b in enumerate(reversed(buttons[0])):
     b.draw(screenPrescaled)
 
-  # Print framerate and playtime in titlebar.
-  text = "FPS: {0:.2f}   Playtime: {1:.2f}".format(clock.get_fps(), playtime)
-  pygame.display.set_caption(text)
-  draw_text(screenPrescaled, font, "FPS: {:6.3}{}PLAYTIME: {:6.3} SECONDS".format(
+  draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS".format(
                            clock.get_fps(), " "*5, playtime), windoww, windowh)
 
   #pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
