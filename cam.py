@@ -145,7 +145,7 @@ icons = [] # This list gets populated at startup
 # set); trying to reuse those few elements just made for an ugly
 # tangle of code elsewhere.
 
-buttons = [
+buttonsold = [
    #row 1
    [Button( bg='adobe_Ai'),
    Button( bg='adobe_Dw'),
@@ -235,6 +235,97 @@ buttons = [
    
 ]
 
+buttons = [
+   #row 1
+   [Button( bg='escape'),
+   Button( bg='f1'),
+   Button( bg='f2'),
+   Button( bg='f3'),
+   Button( bg='f4'),
+   Button( bg='f5'),
+   Button( bg='f6'),
+   Button( bg='f7'),
+   Button( bg='f8'),
+   Button( bg='f9'),
+   Button( bg='f10'),
+   Button( bg='f11'),
+   Button( bg='f12'),
+   Button( bg='printscreen')
+   ],
+   
+   #row 2
+   [
+   Button( bg='1', key=pygame.K_1),
+   Button( bg='2', key=pygame.K_2),
+   Button( bg='3', key=pygame.K_3),
+   Button( bg='4', key=pygame.K_4),
+   Button( bg='5', key=pygame.K_5),
+   Button( bg='6', key=pygame.K_6),
+   Button( bg='7', key=pygame.K_7),
+   Button( bg='8', key=pygame.K_8),
+   Button( bg='9', key=pygame.K_9),
+   Button( bg='0', key=pygame.K_0),
+   Button( bg='oemclear'),
+   ],
+   
+   #row 3
+   [Button( bg='tab'),
+   Button( bg='q', key=pygame.K_q),
+   Button( bg='w', key=pygame.K_w),
+   Button( bg='e', key=pygame.K_e),
+   Button( bg='r', key=pygame.K_r),
+   Button( bg='t', key=pygame.K_t),
+   Button( bg='y', key=pygame.K_y),
+   Button( bg='u', key=pygame.K_u),
+   Button( bg='i', key=pygame.K_i),
+   Button( bg='o', key=pygame.K_o),
+   Button( bg='p', key=pygame.K_p),
+   Button( bg='return'),
+   ],
+   
+   #row 4
+   [Button( bg='capital'),
+   Button( bg='a', key=pygame.K_a),
+   Button( bg='s', key=pygame.K_s),
+   Button( bg='d', key=pygame.K_d),
+   Button( bg='f', key=pygame.K_f),
+   Button( bg='g', key=pygame.K_g),
+   Button( bg='h', key=pygame.K_h),
+   Button( bg='j', key=pygame.K_j),
+   Button( bg='k', key=pygame.K_k),
+   Button( bg='l', key=pygame.K_l),
+   Button( bg=';'),
+   Button( bg='#',),
+   ],
+   
+   #row 5
+   [Button( bg='lshiftkey'),
+   Button( bg='z', key=pygame.K_z),
+   Button( bg='x', key=pygame.K_x),
+   Button( bg='c', key=pygame.K_c),
+   Button( bg='v', key=pygame.K_v),
+   Button( bg='b', key=pygame.K_b),
+   Button( bg='n', key=pygame.K_n),
+   Button( bg='m', key=pygame.K_m),
+   Button( bg=','),
+   Button( bg='rshiftkey'),
+   Button( bg='up'),
+   Button( bg='forwardslash'),
+   ],
+   
+   #row 6
+   [Button( bg='lcontrolkey'),
+   Button( bg='lwin'),
+   Button( bg='alt'),
+   Button( bg='space'),
+   Button( bg='alt'),
+   Button( bg='left'),
+   Button( bg='down'),
+   Button( bg='right'),
+   ]
+   
+]
+
 
 # Scan files in a directory, locating JPEGs with names matching the
 # software's convention (IMG_XXXX.JPG), returning a tuple with the
@@ -256,7 +347,7 @@ def draw_text(screen, font, text, surfacewidth, surfaceheight):
 	"""Center text in window
 	"""
 	fw, fh = font.size(text) # fw: font width,  fh: font height
-	surface = font.render(text, True, (255, 255, 255))
+	surface = font.render(text, True, (0, 0, 255))
 	# // makes integer division in python3 
 	screen.blit(surface, (0,0))
 
@@ -299,7 +390,7 @@ pygame.mixer.quit()
 if pygame.display.Info().current_h == 480:
   screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
 else:
-  screen = pygame.display.set_mode((800,480),pygame.HWSURFACE,16)
+  screen = pygame.display.set_mode((1000,480),pygame.HWSURFACE,16)
 screenPrescaled = screen
 #screenPrescaled = pygame.Surface((800, 480), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
