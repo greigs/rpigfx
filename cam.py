@@ -26,8 +26,9 @@ class Icon:
 
 	def __init__(self, name):
 	  self.name = name
-	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png')
+	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png').convert(24)
 	  self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
+          self.bitmap = self.bitmap.convert(16)
 
 
 # Button is a simple tappable screen region.  Each has:
@@ -83,13 +84,14 @@ class Button:
 	  if self.color:
 	    screen.fill(self.color, self.rect)
 	  if self.iconBg:
-	    img = pygame.transform.smoothscale(self.iconBg.bitmap, (self.w,self.h))
+	    img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+            #img = self.iconBg.bitmap
 	    #img.set_alpha(255)
 	    screen.blit(img,
 	      (self.rect[0],
 	       self.rect[1]))
 	  if self.iconFg:
-	    img = pygame.transform.smoothscale(self.iconFg.bitmap, (self.w,self.h))
+	    img = pygame.transform.scale(self.iconFg.bitmap, (self.w,self.h))
 	    #img.set_alpha(255)
 	    screen.blit(img,
 	      (self.rect[0],
@@ -295,9 +297,9 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,24)
-#screen = pygame.display.set_mode((800,480),pygame.HWSURFACE,24)
-screenPrescaled = pygame.Surface((980,612), flags=pygame.HWSURFACE, depth=24)
+screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
+#screen = pygame.display.set_mode((800,480),pygame.HWSURFACE,16)
+screenPrescaled = pygame.Surface((980, 612), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
@@ -352,24 +354,24 @@ while(True):
     if screenMode >= 3 or screenMode != screenModePrior: break
 
   # Overlay buttons on display and update
-  #screenPrescaled.fill(0)
+  screenPrescaled.fill(0)
   
   lft = 0
   top = 0
   leftpadding = 0
-  spacing = 4
-  normalheight = 100
-  normalwidth = 100
-  topheight = 87
-  topwidth = 87
+  spacing = 4 
+  normalheight = 100 
+  normalwidth = 100 
+  topheight = 86
+  topwidth = 86
   row2key0w = 100
   row2key10w = 230
   row3key0w = 100
-  row3key11w = 130
-  row4key0w = 130
-  row5key0w = 130
-  row6key0w = 130
-  row6key3w = 516
+  row3key11w = 130 
+  row4key0w = 130 
+  row5key0w = 130 
+  row6key0w = 130 
+  row6key3w = 516 
   millis = ((round(time.time() * 1000)) % 1000)
   reverseanimation = (millis > 500)
   millis = millis / 1000
@@ -509,7 +511,7 @@ while(True):
   draw_text(screenPrescaled, font, "FPS: {:6.3}{}PLAYTIME: {:6.3} SECONDS".format(
                            clock.get_fps(), " "*5, playtime), windoww, windowh)
 
-  pygame.transform.smoothscale(screenPrescaled, (windoww, windowh), screen)
+  pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
   
 
   
