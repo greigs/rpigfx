@@ -54,6 +54,8 @@ class Button:
 	  self.key      = None # the key
 	  self.color    = None # Background fill color, if any
 	  self.iconBg   = None # Background Icon (atop color fill)
+	  self.staticBg = None # 
+	  self.animating= False
 	  self.iconFg   = None # Foreground Icon (atop background)
 	  self.bg       = None # Background Icon name
 	  self.fg       = None # Foreground Icon name
@@ -86,7 +88,12 @@ class Button:
 	  if self.color:
 	    screen.fill(self.color, self.rect)
 	  if self.iconBg:
-	    img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+	    if self.staticBg is None:
+	      self.staticBg = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+	    if self.animating:
+	      img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+	    else:
+	      img = self.staticBg
 	    #img = self.iconBg.bitmap
 	    #img.set_alpha(255)
 	    screen.blit(img,
@@ -256,6 +263,7 @@ def draw_text(screen, font, text, surfacewidth, surfaceheight):
 
 def apply_animation(b,keys,w,h, reverseanimation):
     if keys is not None and b.key is not None and len(keys) > 0 and keys[b.key]:
+      b.animating = True
       if reverseanimation:
         b.w = w + int(pytweening.linear(1.0 - millis ) * 100)
         b.h = h + int(pytweening.linear(1.0 - millis ) * 100)      
@@ -265,6 +273,7 @@ def apply_animation(b,keys,w,h, reverseanimation):
     else:
       b.h = h
       b.w = w
+      b.animating = False
 
 # Initialization -----------------------------------------------------------
 
