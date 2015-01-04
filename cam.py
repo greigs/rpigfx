@@ -28,7 +28,7 @@ class Icon:
 	  self.name = name
 	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png').convert(24)
 	  self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
-          self.bitmap = self.bitmap.convert(16)
+	  self.bitmap = self.bitmap.convert(16)
 
 
 # Button is a simple tappable screen region.  Each has:
@@ -299,7 +299,8 @@ pygame.init()
 pygame.mixer.quit()
 screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
 #screen = pygame.display.set_mode((800,480),pygame.HWSURFACE,16)
-screenPrescaled = pygame.Surface((980, 612), flags=pygame.HWSURFACE, depth=16)
+screenPrescaled = screen
+#screenPrescaled = pygame.Surface((800, 480), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
@@ -328,7 +329,7 @@ for s in buttons:        # For each screenful of buttons...
 # Main loop ----------------------------------------------------------------
 framecount = 0
 # Desired framerate in frames per second. Try out other values.              
-FPS = 20
+FPS = 80
 # How many seconds the "game" is played.
 playtime = 0.0
 while(True):
@@ -359,19 +360,19 @@ while(True):
   lft = 0
   top = 0
   leftpadding = 0
-  spacing = 4 
-  normalheight = 100 
-  normalwidth = 100 
-  topheight = 86
-  topwidth = 86
-  row2key0w = 100
-  row2key10w = 230
-  row3key0w = 100
-  row3key11w = 130 
-  row4key0w = 130 
-  row5key0w = 130 
-  row6key0w = 130 
-  row6key3w = 516 
+  spacing = 2 
+  normalheight = 82 
+  normalwidth = 82 
+  topheight = 56
+  topwidth = 56
+  row2key0w = 82
+  row2key10w = 180
+  row3key0w = 82
+  row3key11w = 110 
+  row4key0w = 110 
+  row5key0w = 110 
+  row6key0w = 110 
+  row6key3w = 480 
   millis = ((round(time.time() * 1000)) % 1000)
   reverseanimation = (millis > 500)
   millis = millis / 1000
@@ -511,7 +512,7 @@ while(True):
   draw_text(screenPrescaled, font, "FPS: {:6.3}{}PLAYTIME: {:6.3} SECONDS".format(
                            clock.get_fps(), " "*5, playtime), windoww, windowh)
 
-  pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
+  #pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
   
 
   
