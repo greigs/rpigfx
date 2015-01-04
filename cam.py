@@ -27,8 +27,8 @@ class Icon:
 	def __init__(self, name):
 	  self.name = name
 	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png').convert(24)
-	  self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
-	  self.bitmap = self.bitmap.convert(16)
+	  #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
+	  self.bitmap = self.originalbitmap.convert(16)
 
 
 # Button is a simple tappable screen region.  Each has:
@@ -329,7 +329,7 @@ for s in buttons:        # For each screenful of buttons...
 # Main loop ----------------------------------------------------------------
 framecount = 0
 # Desired framerate in frames per second. Try out other values.              
-FPS = 80
+FPS = 20
 # How many seconds the "game" is played.
 playtime = 0.0
 while(True):
