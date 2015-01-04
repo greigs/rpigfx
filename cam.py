@@ -51,6 +51,7 @@ class Button:
 
 	def __init__(self, rect, **kwargs):
 	  self.rect     = rect # Bounds
+	  self.key      = None # the key
 	  self.color    = None # Background fill color, if any
 	  self.iconBg   = None # Background Icon (atop color fill)
 	  self.iconFg   = None # Foreground Icon (atop background)
@@ -66,6 +67,7 @@ class Button:
 	    elif key == 'fg'   : self.fg       = value
 	    elif key == 'cb'   : self.callback = value
 	    elif key == 'value': self.value    = value
+	    elif key == 'key'  : self.key      = value
 
 	def selected(self, pos):
 	  x1 = self.rect[0]
@@ -85,7 +87,7 @@ class Button:
 	    screen.fill(self.color, self.rect)
 	  if self.iconBg:
 	    img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
-            #img = self.iconBg.bitmap
+	    #img = self.iconBg.bitmap
 	    #img.set_alpha(255)
 	    screen.blit(img,
 	      (self.rect[0],
@@ -157,12 +159,12 @@ buttons = [
    
    #row 2
    [Button((  0,  0, 128, 128), bg='chrome'),
-   Button((  0,  0, 128, 128), bg='dropbox'),
-   Button((  0,  0, 128, 128), bg='email'),
-   Button((  0,  0, 128, 128), bg='explorer'),
-   Button((  0,  0, 128, 128), bg='firefox'),
-   Button((  0,  0, 128, 128), bg='flashget'),
-   Button((  0,  0, 128, 128), bg='foobar'),
+   Button((  0,  0, 128, 128), bg='dropbox', key=pygame.K_q),
+   Button((  0,  0, 128, 128), bg='email', key=pygame.K_w),
+   Button((  0,  0, 128, 128), bg='explorer', key=pygame.K_e),
+   Button((  0,  0, 128, 128), bg='firefox', key=pygame.K_r),
+   Button((  0,  0, 128, 128), bg='flashget', key=pygame.K_t),
+   Button((  0,  0, 128, 128), bg='foobar', key=pygame.K_y),
    Button((  0,  0, 128, 128), bg='chrome'),
    Button((  0,  0, 128, 128), bg='dropbox'),
    Button((  0,  0, 128, 128), bg='email'),
@@ -243,27 +245,6 @@ def imgRange(path):
 	finally:
 	  return None if min > max else (min, max)
 
-# Busy indicator.  To use, run in separate thread, set global 'busy'
-# to False when done.
-def spinner():
-	global busy, screenMode, screenModePrior
-
-	buttons[screenMode][3].setBg('working')
-	buttons[screenMode][3].draw(screen)
-	pygame.display.update()
-
-	busy = True
-	n    = 0
-	while busy is True:
-	  buttons[screenMode][4].setBg('work-' + str(n))
-	  buttons[screenMode][4].draw(screen)
-	  pygame.display.update()
-	  n = (n + 1) % 5
-	  time.sleep(0.15)
-
-	buttons[screenMode][3].setBg(None)
-	buttons[screenMode][4].setBg(None)
-	screenModePrior = -1 # Force refresh
 
 def draw_text(screen, font, text, surfacewidth, surfaceheight):
 	"""Center text in window
@@ -273,7 +254,17 @@ def draw_text(screen, font, text, surfacewidth, surfaceheight):
 	# // makes integer division in python3 
 	screen.blit(surface, (0,0))
 
-
+def apply_animation(b,keys,w,h, reverseanimation):
+    if keys is not None and b.key is not None and len(keys) > 0 and keys[b.key]:
+      if reverseanimation:
+        b.w = w + int(pytweening.linear(1.0 - millis ) * 100)
+        b.h = h + int(pytweening.linear(1.0 - millis ) * 100)      
+      else:
+        b.w = w + int(pytweening.linear( (millis )) * 100)
+        b.h = h + int(pytweening.linear((millis )) * 100)
+    else:
+      b.h = h
+      b.w = w
 
 # Initialization -----------------------------------------------------------
 
@@ -336,15 +327,17 @@ while(True):
   # Do not go faster than this framerate.
   milliseconds = clock.tick(FPS) 
   playtime += milliseconds / 1000.0 
+  keys = None
 
   framecount = framecount + 1
   # Process touchscreen input
   while True:
     for event in pygame.event.get():
       if(event.type is KEYDOWN):
-        key = pygame.key.get_pressed()
-        pygame.quit()
-        sys.exit()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_x]:
+          pygame.quit()
+          sys.exit()
         #pos = pygame.mouse.get_pos()
         #for b in buttons[screenMode]:
           #if b.selected(pos): break
@@ -354,6 +347,8 @@ while(True):
     # screenMode changes.
     if screenMode >= 3 or screenMode != screenModePrior: break
 
+  
+  keys = pygame.key.get_pressed()
   # Overlay buttons on display and update
   screenPrescaled.fill(0)
   
@@ -377,18 +372,14 @@ while(True):
   reverseanimation = (millis > 500)
   millis = millis / 1000
 
+  
+  # Row 1
   for i,b in enumerate(buttons[0]):
+    w = topwidth
+    h = topheight
     lft = leftpadding + (i * (spacing + topwidth))
     b.rect = ( lft, top, 0, 0)
-
-    if reverseanimation:
-      b.w = topwidth + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = topheight + int(pytweening.linear(1.0 - millis ) * 10)      
-    else:
-      b.w = topwidth + int(pytweening.linear( (millis )) * 10)
-      b.h = topheight + int(pytweening.linear((millis )) * 10)
-    b.draw(screenPrescaled)
-
+    apply_animation(b,keys,w,h, reverseanimation)
     
   # Row 2
   top = top + topheight + spacing
@@ -406,13 +397,7 @@ while(True):
       lft = ((i - 1) * (spacing + normalwidth)) + row2key0w + spacing
       
     b.rect = ( lft, top, 0, 0)
-    if reverseanimation:
-      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
-    else:
-      b.w = w + int(pytweening.linear( (millis )) * 10)
-      b.h = h + int(pytweening.linear((millis )) * 10)
-    b.draw(screenPrescaled)   
+    apply_animation(b,keys,w,h, reverseanimation)
 
   # Row 3
   top = top + normalheight + spacing
@@ -430,13 +415,7 @@ while(True):
       lft = ((i - 1) * (spacing + normalwidth)) + row3key0w + spacing
       
     b.rect = ( lft, top, 0, 0)
-    if reverseanimation:
-      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
-    else:
-      b.w = w + int(pytweening.linear( (millis )) * 10)
-      b.h = h + int(pytweening.linear((millis )) * 10)
-    b.draw(screenPrescaled)  
+    apply_animation(b,keys,w,h, reverseanimation)
 
   # Row 4
   top = top + normalheight + spacing
@@ -451,14 +430,8 @@ while(True):
       lft = ((i - 1) * (spacing + normalwidth)) + row4key0w + spacing
       
     b.rect = ( lft, top, 0, 0)
-    if reverseanimation:
-      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
-    else:
-      b.w = w + int(pytweening.linear( (millis )) * 10)
-      b.h = h + int(pytweening.linear((millis )) * 10)
-    b.draw(screenPrescaled)  
-
+    apply_animation(b,keys,w,h, reverseanimation)
+ 
   # Row 5
   top = top + normalheight + spacing
 
@@ -472,13 +445,7 @@ while(True):
       lft = ((i - 1) * (spacing + normalwidth)) + row5key0w + spacing
       
     b.rect = ( lft, top, 0, 0)
-    if reverseanimation:
-      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
-    else:
-      b.w = w + int(pytweening.linear( (millis )) * 10)
-      b.h = h + int(pytweening.linear((millis )) * 10)
-    b.draw(screenPrescaled)    
+    apply_animation(b,keys,w,h, reverseanimation) 
 
   # Row 6
   top = top + normalheight + spacing
@@ -498,13 +465,20 @@ while(True):
       lft = ((i - 1) * (spacing + normalwidth)) + row6key0w + spacing
       
     b.rect = ( lft, top, 0, 0)
-    if reverseanimation:
-      b.w = w + int(pytweening.linear(1.0 - millis ) * 10)
-      b.h = h + int(pytweening.linear(1.0 - millis ) * 10)      
-    else:
-      b.w = w + int(pytweening.linear( (millis )) * 10)
-      b.h = h + int(pytweening.linear((millis )) * 10)
-    b.draw(screenPrescaled)    
+    apply_animation(b,keys,w,h, reverseanimation) 
+
+  for i,b in enumerate(reversed(buttons[5])):
+    b.draw(screenPrescaled)
+  for i,b in enumerate(reversed(buttons[4])):
+    b.draw(screenPrescaled)
+  for i,b in enumerate(reversed(buttons[3])):
+    b.draw(screenPrescaled)
+  for i,b in enumerate(reversed(buttons[2])):
+    b.draw(screenPrescaled)
+  for i,b in enumerate(reversed(buttons[1])):
+    b.draw(screenPrescaled)
+  for i,b in enumerate(reversed(buttons[0])):
+    b.draw(screenPrescaled)
 
   # Print framerate and playtime in titlebar.
   text = "FPS: {0:.2f}   Playtime: {1:.2f}".format(clock.get_fps(), playtime)
