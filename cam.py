@@ -263,6 +263,13 @@ def spinner():
 	buttons[screenMode][4].setBg(None)
 	screenModePrior = -1 # Force refresh
 
+def draw_text(screen, font, text, surfacewidth, surfaceheight):
+	"""Center text in window
+	"""
+	fw, fh = font.size(text) # fw: font width,  fh: font height
+	surface = font.render(text, True, (255, 255, 255))
+	# // makes integer division in python3 
+	screen.blit(surface, (0,0))
 
 
 
@@ -289,11 +296,13 @@ size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
 screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,24)
+#screen = pygame.display.set_mode((800,480),pygame.HWSURFACE,24)
 screenPrescaled = pygame.Surface((980,612), flags=pygame.HWSURFACE, depth=24)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
 #pygame.mouse.set_visible(False)
+font = pygame.font.SysFont('mono', 24, bold=True)
 
 
 
@@ -316,7 +325,15 @@ for s in buttons:        # For each screenful of buttons...
 
 # Main loop ----------------------------------------------------------------
 framecount = 0
+# Desired framerate in frames per second. Try out other values.              
+FPS = 20
+# How many seconds the "game" is played.
+playtime = 0.0
 while(True):
+  # Do not go faster than this framerate.
+  milliseconds = clock.tick(FPS) 
+  playtime += milliseconds / 1000.0 
+
   framecount = framecount + 1
   # Process touchscreen input
   while True:
@@ -335,7 +352,7 @@ while(True):
     if screenMode >= 3 or screenMode != screenModePrior: break
 
   # Overlay buttons on display and update
-  screenPrescaled.fill(0)
+  #screenPrescaled.fill(0)
   
   lft = 0
   top = 0
@@ -486,8 +503,17 @@ while(True):
       b.h = h + int(pytweening.linear((millis )) * 10)
     b.draw(screenPrescaled)    
 
+  # Print framerate and playtime in titlebar.
+  text = "FPS: {0:.2f}   Playtime: {1:.2f}".format(clock.get_fps(), playtime)
+  pygame.display.set_caption(text)
+  draw_text(screenPrescaled, font, "FPS: {:6.3}{}PLAYTIME: {:6.3} SECONDS".format(
+                           clock.get_fps(), " "*5, playtime), windoww, windowh)
+
   pygame.transform.smoothscale(screenPrescaled, (windoww, windowh), screen)
+  
+
+  
   pygame.display.update()
-  clock.tick(10)
+
 
   screenModePrior = screenMode
