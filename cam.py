@@ -31,6 +31,7 @@ class Icon:
 	  self.bitmap = self.originalbitmap.convert(16)
 
 
+
 # Button is a simple tappable screen region.  Each has:
 #  - bounding rect ((X,Y,W,H) in pixels)
 #  - optional background color and/or Icon (or None), always centered
@@ -62,6 +63,8 @@ class Button:
 	  self.value    = None # Value passed to callback
 	  self.w        = None
 	  self.h        = None
+	  self.shift    = None
+	  self.shiftimg = None
 	  for key, value in kwargs.iteritems():
 	    if   key == 'color': self.color    = value
 	    elif key == 'bg'   : self.bg       = value
@@ -69,6 +72,8 @@ class Button:
 	    elif key == 'cb'   : self.callback = value
 	    elif key == 'value': self.value    = value
 	    elif key == 'key'  : self.key      = value
+	    elif key == 'shift': self.shift    = value
+
 
 	def selected(self, pos):
 	  x1 = self.rect[0]
@@ -84,20 +89,24 @@ class Button:
 	  return False
 
 	def draw(self, screen):
+	  if self.shiftimg is None and self.shift is not None:
+	    self.shiftimg = pygame.image.load(iconPath + '/' + self.shift + '.png').convert(16)
+	    self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
 	  if self.color:
 	    screen.fill(self.color, self.rect)
 	  if self.iconBg:
-	    if self.staticBg is None:
-	      self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
-	    if self.animating:
-	      img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+	    if shift and self.shift is not None:
+	      img = self.shiftimg
 	    else:
-	      img = self.staticBg
+	      if self.staticBg is None:
+	        self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
+	      if self.animating:
+	        img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+	      else:
+	        img = self.staticBg
 	    #img = self.iconBg.bitmap
 	    #img.set_alpha(255)
-	    screen.blit(img,
-	      (self.rect[0],
-	       self.rect[1]))
+	    screen.blit(img,(self.rect[0],self.rect[1]))
 	  if self.iconFg:
 	    img = pygame.transform.scale(self.iconFg.bitmap, (self.w,self.h))
 	    #img.set_alpha(255)
@@ -134,6 +143,8 @@ iconPath        = 'icons' # Subdirectory containing UI bitmaps (PNG format)
 saveIdx         = -1      # Image index for saving (-1 = none set yet)
 loadIdx         = -1      # Image index for loading
 scaled          = None    # pygame Surface w/last-loaded image
+
+shift           = False
 
 icons = [] # This list gets populated at startup
 
@@ -270,43 +281,43 @@ buttons = [
    
    #row 3
    [Button( bg='tab'),
-   Button( bg='q', key=pygame.K_q),
-   Button( bg='w', key=pygame.K_w),
-   Button( bg='e', key=pygame.K_e),
-   Button( bg='r', key=pygame.K_r),
-   Button( bg='t', key=pygame.K_t),
-   Button( bg='y', key=pygame.K_y),
-   Button( bg='u', key=pygame.K_u),
-   Button( bg='i', key=pygame.K_i),
-   Button( bg='o', key=pygame.K_o),
-   Button( bg='p', key=pygame.K_p),
+   Button( bg='q', shift = 'qu', key=pygame.K_q),
+   Button( bg='w', shift = 'wu', key=pygame.K_w),
+   Button( bg='e', shift = 'eu', key=pygame.K_e),
+   Button( bg='r', shift = 'ru', key=pygame.K_r),
+   Button( bg='t', shift = 'tu', key=pygame.K_t),
+   Button( bg='y', shift = 'yu', key=pygame.K_y),
+   Button( bg='u', shift = 'uu', key=pygame.K_u),
+   Button( bg='i', shift = 'iu', key=pygame.K_i),
+   Button( bg='o', shift = 'ou', key=pygame.K_o),
+   Button( bg='p', shift = 'pu', key=pygame.K_p),
    Button( bg='return'),
    ],
    
    #row 4
    [Button( bg='capital'),
-   Button( bg='a', key=pygame.K_a),
-   Button( bg='s', key=pygame.K_s),
-   Button( bg='d', key=pygame.K_d),
-   Button( bg='f', key=pygame.K_f),
-   Button( bg='g', key=pygame.K_g),
-   Button( bg='h', key=pygame.K_h),
-   Button( bg='j', key=pygame.K_j),
-   Button( bg='k', key=pygame.K_k),
-   Button( bg='l', key=pygame.K_l),
+   Button( bg='a', shift = 'au', key=pygame.K_a),
+   Button( bg='s', shift = 'su', key=pygame.K_s),
+   Button( bg='d', shift = 'du', key=pygame.K_d),
+   Button( bg='f', shift = 'fu', key=pygame.K_f),
+   Button( bg='g', shift = 'gu', key=pygame.K_g),
+   Button( bg='h', shift = 'hu', key=pygame.K_h),
+   Button( bg='j', shift = 'ju', key=pygame.K_j),
+   Button( bg='k', shift = 'ku', key=pygame.K_k),
+   Button( bg='l', shift = 'lu', key=pygame.K_l),
    Button( bg=';'),
    Button( bg='#',),
    ],
    
    #row 5
    [Button( bg='lshiftkey'),
-   Button( bg='z', key=pygame.K_z),
-   Button( bg='x', key=pygame.K_x),
-   Button( bg='c', key=pygame.K_c),
-   Button( bg='v', key=pygame.K_v),
-   Button( bg='b', key=pygame.K_b),
-   Button( bg='n', key=pygame.K_n),
-   Button( bg='m', key=pygame.K_m),
+   Button( bg='z', shift = 'zu', key=pygame.K_z),
+   Button( bg='x', shift = 'xu', key=pygame.K_x),
+   Button( bg='c', shift = 'cu', key=pygame.K_c),
+   Button( bg='v', shift = 'vu', key=pygame.K_v),
+   Button( bg='b', shift = 'bu', key=pygame.K_b),
+   Button( bg='n', shift = 'nu', key=pygame.K_n),
+   Button( bg='m', shift = 'mu', key=pygame.K_m),
    Button( bg=','),
    Button( bg='rshiftkey'),
    Button( bg='up'),
@@ -433,12 +444,17 @@ while(True):
   framecount = framecount + 1
 
   for event in pygame.event.get():
-    if(event.type is KEYDOWN):
+    if event.type is KEYDOWN:
       keys = pygame.key.get_pressed()
       if keys[pygame.K_ESCAPE]:
         pygame.quit()
         sys.exit()
-
+      if keys[pygame.K_LSHIFT]:
+        shift = True
+    elif event.type is KEYUP:
+      keys = pygame.key.get_pressed()
+      if not keys[pygame.K_LSHIFT]:
+        shift = False
   
   keys = pygame.key.get_pressed()
   # Overlay buttons on display and update
