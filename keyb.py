@@ -266,6 +266,7 @@ buttons = [
    
    #row 2
    [
+   Button( bg='~'),
    Button( bg='1', key=pygame.K_1),
    Button( bg='2', key=pygame.K_2),
    Button( bg='3', key=pygame.K_3),
@@ -276,6 +277,8 @@ buttons = [
    Button( bg='8', key=pygame.K_8),
    Button( bg='9', key=pygame.K_9),
    Button( bg='0', key=pygame.K_0),
+   Button( bg='-'),
+   Button( bg='+'),
    Button( bg='oemclear'),
    ],
    
@@ -291,6 +294,8 @@ buttons = [
    Button( bg='i', shift = 'iu', key=pygame.K_i),
    Button( bg='o', shift = 'ou', key=pygame.K_o),
    Button( bg='p', shift = 'pu', key=pygame.K_p),
+   Button( bg='['),
+   Button( bg=']'),
    Button( bg='return'),
    ],
    
@@ -306,7 +311,9 @@ buttons = [
    Button( bg='k', shift = 'ku', key=pygame.K_k),
    Button( bg='l', shift = 'lu', key=pygame.K_l),
    Button( bg=';'),
-   Button( bg='#',),
+   Button( bg='#'),
+   Button( bg='#'),
+   Button( bg='#'),
    ],
    
    #row 5
@@ -401,8 +408,9 @@ pygame.mixer.quit()
 if pygame.display.Info().current_h == 480:
   screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
 else:
-  screen = pygame.display.set_mode((1000,480),pygame.HWSURFACE,16)
+  screen = pygame.display.set_mode((1300,540),pygame.HWSURFACE,16)
 screenPrescaled = screen
+overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA, 16)
 #screenPrescaled = pygame.Surface((800, 480), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
@@ -463,17 +471,21 @@ while(True):
   lft = 0
   top = 0
   leftpadding = 0
-  spacing = 2 
-  normalheight = 79
-  normalwidth = 79 
-  topheight = 70
-  topwidth = 70
-  row2key0w = 79
-  row2key10w = 190
-  row3key0w = 79
-  row3key11w = 110 
+  spacinghor = 20 
+  spacingver = 30 
+  normalheight = 60
+  normalwidth = 60 
+  topheight = 60
+  topwidth = 60
+  row2key0w = 60
+  row2key13spacing = 60
+  row2key13w = 100
+  row3key0w = 90
+  row3key13w = 130 
   row4key0w = 110 
-  row5key0w = 110 
+  row4key13spacing = 40
+  row4key13w = 90
+  row5key0w = 70 
   row6key0w = 110 
   row6key3w = 403 
   millis = ((round(time.time() * 1000)) % 1000)
@@ -485,12 +497,12 @@ while(True):
   for i,b in enumerate(buttons[0]):
     w = topwidth
     h = topheight
-    lft = leftpadding + (i * (spacing + topwidth))
+    lft = leftpadding + (i * (spacinghor + topwidth))
     b.rect = ( lft, top, 0, 0)
     apply_animation(b,keys,w,h, reverseanimation)
     
   # Row 2
-  top = top + topheight + spacing
+  top = top + topheight + spacingver
 
   for i,b in enumerate(buttons[1]):
     w = normalwidth
@@ -498,17 +510,17 @@ while(True):
     if i == 0:
       lft = 0
       w = row2key0w
-    elif i == 10:
-      w = row2key10w
-      lft = ((i - 1) * (spacing + normalwidth)) + row2key0w + spacing   
+    elif i == 13:
+      w = row2key13w
+      lft = ((i - 1) * (spacinghor + normalwidth)) + row2key0w + spacinghor + row2key13spacing  
     else:
-      lft = ((i - 1) * (spacing + normalwidth)) + row2key0w + spacing
+      lft = ((i - 1) * (spacinghor + normalwidth)) + row2key0w + spacinghor
       
     b.rect = ( lft, top, 0, 0)
     apply_animation(b,keys,w,h, reverseanimation)
 
   # Row 3
-  top = top + normalheight + spacing
+  top = top + normalheight + spacingver
 
   for i,b in enumerate(buttons[2]):
     w = normalwidth
@@ -516,32 +528,35 @@ while(True):
     if i == 0:
       lft = 0
       w = row3key0w
-    elif i == 11:
-      w = row3key11w
-      lft = ((i - 1) * (spacing + normalwidth)) + row3key0w + spacing   
+    elif i == 13:
+      w = row3key13w
+      lft = ((i - 1) * (spacinghor + normalwidth)) + row3key0w + spacinghor   
     else:
-      lft = ((i - 1) * (spacing + normalwidth)) + row3key0w + spacing
+      lft = ((i - 1) * (spacinghor + normalwidth)) + row3key0w + spacinghor
       
     b.rect = ( lft, top, 0, 0)
     apply_animation(b,keys,w,h, reverseanimation)
 
   # Row 4
-  top = top + normalheight + spacing
+  top = top + normalheight + spacingver
 
   for i,b in enumerate(buttons[3]):
     w = normalwidth
     h = normalheight
     if i == 0:
       lft = 0
-      w = row4key0w
+      w = row4key0w	
+    elif i == 13:
+      w = row4key13w
+      lft = ((i - 1) * (spacinghor + normalwidth)) + row4key13w + spacinghor + row4key13spacing
     else:
-      lft = ((i - 1) * (spacing + normalwidth)) + row4key0w + spacing
+      lft = ((i - 1) * (spacinghor + normalwidth)) + row4key0w + spacinghor
       
     b.rect = ( lft, top, 0, 0)
     apply_animation(b,keys,w,h, reverseanimation)
  
   # Row 5
-  top = top + normalheight + spacing
+  top = top + normalheight + spacingver
 
   for i,b in enumerate(buttons[4]):
     w = normalwidth
@@ -550,13 +565,13 @@ while(True):
       lft = 0
       w = row5key0w
     else:
-      lft = ((i - 1) * (spacing + normalwidth)) + row5key0w + spacing
+      lft = ((i - 1) * (spacinghor + normalwidth)) + row5key0w + spacinghor
       
     b.rect = ( lft, top, 0, 0)
     apply_animation(b,keys,w,h, reverseanimation) 
 
   # Row 6
-  top = top + normalheight + spacing
+  top = top + normalheight + spacingver
 
   for i,b in enumerate(buttons[5]):
     w = normalwidth
@@ -566,11 +581,11 @@ while(True):
       w = row6key0w
     elif i == 3:
       w = row6key3w
-      lft = ((i - 1) * (spacing + normalwidth)) + row6key0w + spacing
+      lft = ((i - 1) * (spacinghor + normalwidth)) + row6key0w + spacinghor
     elif i > 3:
-      lft = ((i - 2) * (spacing + normalwidth)) + row6key0w + spacing + row6key3w + spacing
+      lft = ((i - 2) * (spacinghor + normalwidth)) + row6key0w + spacinghor + row6key3w + spacinghor
     else:
-      lft = ((i - 1) * (spacing + normalwidth)) + row6key0w + spacing
+      lft = ((i - 1) * (spacinghor + normalwidth)) + row6key0w + spacinghor
       
     b.rect = ( lft, top, 0, 0)
     apply_animation(b,keys,w,h, reverseanimation) 
@@ -593,9 +608,12 @@ while(True):
 
   #pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
   
-
+  
+  overlay.fill((int(pytweening.linear(millis ) * 100),int(pytweening.linear(1.0 - millis ) * 100),int(pytweening.linear(1.0 - millis ) * 50),0))
+  screen.blit(overlay, (0,0), None, BLEND_MIN)
   
   pygame.display.update()
+ 
 
 
   screenModePrior = screenMode
