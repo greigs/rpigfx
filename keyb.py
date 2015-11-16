@@ -11,6 +11,7 @@ import threading
 import time
 import sys
 import pytweening
+import gradients
 from pygame.locals import *
 from subprocess import call  
 
@@ -26,7 +27,7 @@ class Icon:
 
 	def __init__(self, name):
 	  self.name = name
-	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png').convert(24)
+	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png').convert(16)
 	  #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
 	  self.bitmap = self.originalbitmap.convert(16)
 
@@ -90,7 +91,7 @@ class Button:
 
 	def draw(self, screen):
 	  if self.shiftimg is None and self.shift is not None:
-	    self.shiftimg = pygame.image.load(iconPath + '/' + self.shift + '.png').convert(16)
+	    self.shiftimg = pygame.image.load(iconPath + '/' + self.shift + '.png').convert(24)
 	    self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
 	  if self.color:
 	    screen.fill(self.color, self.rect)
@@ -360,7 +361,73 @@ def imgRange(path):
 	finally:
 	  return None if min > max else (min, max)
 
+def fill_gradient2(surface, color, gradient, rect=None, vertical=True, forward=True):
+    """fill a surface with a gradient pattern
+    Parameters:
+    color -> starting color
+    gradient -> final color
+    rect -> area to fill; default is surface's rect
+    vertical -> True=vertical; False=horizontal
+    forward -> True=forward; False=reverse
+    
+    Pygame recipe: http://www.pygame.org/wiki/GradientCode
+    """
+    if rect is None: rect = surface.get_rect()
+    x1,x2 = rect.left, rect.right
+    y1,y2 = rect.top, rect.bottom
 
+    c = Color(0,0,0)
+    for j in range(360,-45,-45):
+		for i in range(j,0,-1):
+			c.hsla=(j-i,100,50,100)
+			pygame.draw.circle(surface,c,(360,360),j-i)
+			#__import__('time').sleep(0.01)
+			#pygame.display.flip()
+
+	  
+def fill_gradient(surface, color, gradient, rect=None, vertical=True, forward=True):
+    """fill a surface with a gradient pattern
+    Parameters:
+    color -> starting color
+    gradient -> final color
+    rect -> area to fill; default is surface's rect
+    vertical -> True=vertical; False=horizontal
+    forward -> True=forward; False=reverse
+    
+    Pygame recipe: http://www.pygame.org/wiki/GradientCode
+    """
+    if rect is None: rect = surface.get_rect()
+    x1,x2 = rect.left, rect.right
+    y1,y2 = rect.top, rect.bottom
+    if vertical: h = y2-y1
+    else:        h = x2-x1
+    if forward: a, b = color, gradient
+    else:       b, a = color, gradient
+    rate = (
+        float(b[0]-a[0])/h,
+        float(b[1]-a[1])/h,
+        float(b[2]-a[2])/h
+    )
+    fn_line = pygame.draw.line
+    if vertical:
+        for line in range(y1,y2):
+            color = (
+                min(max(a[0]+(rate[0]*(line-y1)),0),255),
+                min(max(a[1]+(rate[1]*(line-y1)),0),255),
+                min(max(a[2]+(rate[2]*(line-y1)),0),255)
+            )
+            fn_line(surface, color, (x1,line), (x2,line))
+    else:
+        for col in range(x1,x2):
+            color = (
+                min(max(a[0]+(rate[0]*(col-x1)),0),255),
+                min(max(a[1]+(rate[1]*(col-x1)),0),255),
+                min(max(a[2]+(rate[2]*(col-x1)),0),255)
+            )
+            fn_line(surface, color, (col,y1), (col,y2))
+	  
+
+	  
 def draw_text(screen, font, text, surfacewidth, surfaceheight):
 	"""Center text in window
 	"""
@@ -405,12 +472,14 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-if pygame.display.Info().current_h == 480:
-  screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
+if pygame.display.Info().current_h == 768:
+  screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN|pygame.SRCALPHA,16)
 else:
-  screen = pygame.display.set_mode((1300,540),pygame.HWSURFACE,16)
+  screenhw = pygame.display.set_mode((1366,768),pygame.HWSURFACE,16)
+  screen = screenhw.convert_alpha()
 screenPrescaled = screen
-overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA, 16)
+overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA|pygame.HWSURFACE,16)
+overlay = overlay.convert_alpha()
 #screenPrescaled = pygame.Surface((800, 480), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
@@ -609,8 +678,25 @@ while(True):
   #pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
   
   
-  overlay.fill((int(pytweening.linear(millis ) * 100),int(pytweening.linear(1.0 - millis ) * 100),int(pytweening.linear(1.0 - millis ) * 50),0))
-  screen.blit(overlay, (0,0), None, BLEND_MIN)
+  #overlay.fill((255,0,0,100))
+  
+  #fill_gradient(overlay, ( int(pytweening.linear( (millis )) * 20),int(pytweening.linear( (millis )) * 40),int(pytweening.linear( #(millis )) * 60),0 ), (255,255,255,0))
+  
+  #overlay.blit(gradients.horizontal((screen.get_width(), screen.get_height()), (255,0,0,255), (0,255,255,255)),(0,0))
+  
+  #screen.fill(
+   #(255,255,0,255),None, BLEND_RGBA_MULT
+   #int(pytweening.linear(1.0 - millis ) * 100),
+   #int(pytweening.linear(1.0 - millis ) * 50) ,10)
+  #)
+  #overlay.set_alpha(20)
+  #screen.set_alpha(20)
+  #screen.fill((0,0,0,0))
+  #screen.blit(overlay, (0,0))
+  #screen.set_alpha(20)
+  screenhw.fill((0,0,0,0))
+  screenhw.blit(screen,(0,0))
+  #screenhw.blit(overlay,(0,0),None,BLEND_RGBA_MULT)
   
   pygame.display.update()
  
