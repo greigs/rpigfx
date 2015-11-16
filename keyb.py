@@ -473,13 +473,13 @@ size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
 if pygame.display.Info().current_h == 768:
-  screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN|pygame.SRCALPHA,16)
+  screenhw = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN|pygame.SRCALPHA,16)
 else:
   screenhw = pygame.display.set_mode((1366,768),pygame.HWSURFACE,16)
-  screen = screenhw.convert_alpha()
-screenPrescaled = screen
-overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA|pygame.HWSURFACE,16)
-overlay = overlay.convert_alpha()
+  #screen = screenhw.convert_alpha()
+screenPrescaled = screenhw
+#overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA|pygame.HWSURFACE,16)
+#overlay = overlay.convert_alpha()
 #screenPrescaled = pygame.Surface((800, 480), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
@@ -694,8 +694,8 @@ while(True):
   #screen.fill((0,0,0,0))
   #screen.blit(overlay, (0,0))
   #screen.set_alpha(20)
-  screenhw.fill((0,0,0,0))
-  screenhw.blit(screen,(0,0))
+  #screenhw.fill((0,0,0,0))
+  #screenhw.blit(screen,(0,0))
   #screenhw.blit(overlay,(0,0),None,BLEND_RGBA_MULT)
   
   pygame.display.update()
