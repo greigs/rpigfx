@@ -28,9 +28,9 @@ class Icon:
 
 	def __init__(self, name, path):
 	  self.name = name
-	  self.originalbitmap = pygame.image.load(path + '/' + name + '.png').convert(24)
+	  self.originalbitmap = pygame.image.load(path + '/' + name + '.png').convert(16)
 	  #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
-	  self.bitmap = self.originalbitmap.convert(24)
+	  self.bitmap = self.originalbitmap.convert(16)
 
 
 
@@ -67,6 +67,7 @@ class Button:
 	  self.h        = None
 	  self.shift    = None
 	  self.shiftimg = None
+	  self.prevStaticBg = None
 	  for key, value in kwargs.iteritems():
 	    if   key == 'color': self.color    = value
 	    elif key == 'bg'   : self.bg       = value
@@ -92,7 +93,7 @@ class Button:
 
 	def draw(self, screen):
 	  if self.shiftimg is None and self.shift is not None:
-	    self.shiftimg = pygame.image.load(iconPath + '/' + self.shift + '.png').convert(24)
+	    self.shiftimg = pygame.image.load(iconPath + '/' + self.shift + '.png').convert(16)
 	    self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
 	  if self.color:
 	    screen.fill(self.color, self.rect)
@@ -101,12 +102,16 @@ class Button:
 	      img = self.shiftimg
 	    else:
 	      if self.staticBg is None:
-	        self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap, (self.w,self.h))
-	      if self.animating:
+	        self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
+	        img = self.staticBg
+	      elif self.animating:
 	        img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
-	      else:
-			self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap, (self.w,self.h))
+	      elif self.prevStaticBg != self.iconBg:
+		  	self.prevStaticBg = self.iconBg
+			self.staticBg = pygame.transform.scale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
 			img = self.staticBg
+	      else:
+	        img = self.staticBg
 	    #img = self.iconBg.bitmap
 	    #img.set_alpha(255)
 	    screen.blit(img,(self.rect[0],self.rect[1]))
@@ -537,7 +542,7 @@ while(True):
 
   framecount = framecount + 1
   
-  if (framecount % 100) == 0:
+  if (framecount % 50) == 0:
 	s.send('go|')
 	msg = s.recv(1024)
 	print msg
