@@ -28,9 +28,9 @@ class Icon:
 
 	def __init__(self, name, path):
 	  self.name = name
-	  self.originalbitmap = pygame.image.load(path + '/' + name + '.png').convert(16)
+	  self.originalbitmap = pygame.image.load(path + '/' + name + '.png').convert(24)
 	  #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
-	  self.bitmap = self.originalbitmap.convert(16)
+	  self.bitmap = self.originalbitmap.convert(24)
 
 
 
@@ -101,11 +101,12 @@ class Button:
 	      img = self.shiftimg
 	    else:
 	      if self.staticBg is None:
-	        self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
+	        self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap, (self.w,self.h))
 	      if self.animating:
 	        img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
 	      else:
-	        img = self.staticBg
+			self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap, (self.w,self.h))
+			img = self.staticBg
 	    #img = self.iconBg.bitmap
 	    #img.set_alpha(255)
 	    screen.blit(img,(self.rect[0],self.rect[1]))
@@ -146,6 +147,7 @@ minecraftIconPath = 'minecraft' # Subdirectory containing UI bitmaps (PNG format
 saveIdx         = -1      # Image index for saving (-1 = none set yet)
 loadIdx         = -1      # Image index for loading
 scaled          = None    # pygame Surface w/last-loaded image
+msg             = ''
 
 shift           = False
 
@@ -515,7 +517,7 @@ for file in os.listdir(minecraftIconPath):
 		
 		
 s = socket.socket()         # Create a socket object
-host = '192.168.0.7' # Get local machine name
+host = '192.168.0.7'       
 port = 1024                # Reserve a port for your service.
 
 s.connect((host, port))
@@ -537,7 +539,8 @@ while(True):
   
   if (framecount % 100) == 0:
 	s.send('go|')
-	print s.recv(1024)	
+	msg = s.recv(1024)
+	print msg
 
   for event in pygame.event.get():
     if event.type is KEYDOWN:
@@ -603,7 +606,14 @@ while(True):
       lft = ((i - 1) * (spacinghor + normalwidth)) + row2key0w + spacinghor + row2key13spacing  
     else:
       lft = ((i - 1) * (spacinghor + normalwidth)) + row2key0w + spacinghor
-      
+    splitmsg = msg.split(',')
+    for z,smsg in enumerate(splitmsg):
+      if smsg != '':
+        num = int(smsg.split(':')[0])
+        iconname = smsg.split(':')[1]
+        if (i == num):
+          b.setBg(iconname)
+    #b.setBg('sword')
     b.rect = ( lft, top, 0, 0)
     apply_animation(b,keys,w,h, reverseanimation)
 
