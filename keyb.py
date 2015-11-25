@@ -12,6 +12,7 @@ import time
 import sys
 import pytweening
 import gradients
+import socket
 from pygame.locals import *
 from subprocess import call  
 
@@ -25,9 +26,9 @@ from subprocess import call
 
 class Icon:
 
-	def __init__(self, name):
+	def __init__(self, name, path):
 	  self.name = name
-	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png').convert(16)
+	  self.originalbitmap = pygame.image.load(path + '/' + name + '.png').convert(16)
 	  #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
 	  self.bitmap = self.originalbitmap.convert(16)
 
@@ -141,6 +142,7 @@ sizeMode        =  0      # Image size; default = Large
 fxMode          =  0      # Image effect; default = Normal
 isoMode         =  0      # ISO settingl default = Auto
 iconPath        = 'icons' # Subdirectory containing UI bitmaps (PNG format)
+minecraftIconPath = 'minecraft' # Subdirectory containing UI bitmaps (PNG format)
 saveIdx         = -1      # Image index for saving (-1 = none set yet)
 loadIdx         = -1      # Image index for loading
 scaled          = None    # pygame Surface w/last-loaded image
@@ -492,7 +494,7 @@ pygame.display.set_caption('')
 # Load all icons at startup.
 for file in os.listdir(iconPath):
   if fnmatch.fnmatch(file, '*.png'):
-    icons.append(Icon(file.split('.')[0]))
+    icons.append(Icon(file.split('.')[0],iconPath))
 
 # Assign Icons to Buttons, now that they're loaded
 for s in buttons:        # For each screenful of buttons...
@@ -506,6 +508,19 @@ for s in buttons:        # For each screenful of buttons...
         b.fg     = None
 
 
+# Load all minecraft icons.
+for file in os.listdir(minecraftIconPath):
+  if fnmatch.fnmatch(file, '*.png'):
+    icons.append(Icon(file.split('.')[0],minecraftIconPath))		
+		
+		
+s = socket.socket()         # Create a socket object
+host = '192.168.0.7' # Get local machine name
+port = 1024                # Reserve a port for your service.
+
+s.connect((host, port))
+	
+		
 # Main loop ----------------------------------------------------------------
 framecount = 0
 # Desired framerate in frames per second. Try out other values.              
@@ -519,6 +534,10 @@ while(True):
   keys = None
 
   framecount = framecount + 1
+  
+  if (framecount % 100) == 0:
+	s.send('go|')
+	print s.recv(1024)	
 
   for event in pygame.event.get():
     if event.type is KEYDOWN:
