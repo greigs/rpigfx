@@ -262,6 +262,7 @@ buttons = [
    Button( bg='f10'),
    Button( bg='f11'),
    Button( bg='f12'),
+   Button( bg='#'),
    Button( bg='printscreen')
    ],
    
@@ -297,7 +298,7 @@ buttons = [
    Button( bg='p', shift = 'pu', key=pygame.K_p),
    Button( bg='['),
    Button( bg=']'),
-   Button( bg='return'),
+   Button( bg='forwardslash'),
    ],
    
    #row 4
@@ -314,11 +315,12 @@ buttons = [
    Button( bg=';'),
    Button( bg='#'),
    Button( bg='#'),
-   Button( bg='#'),
+   Button( bg='return'),
    ],
    
    #row 5
    [Button( bg='lshiftkey'),
+   Button( bg='forwardslash'),
    Button( bg='z', shift = 'zu', key=pygame.K_z),
    Button( bg='x', shift = 'xu', key=pygame.K_x),
    Button( bg='c', shift = 'cu', key=pygame.K_c),
@@ -327,13 +329,18 @@ buttons = [
    Button( bg='n', shift = 'nu', key=pygame.K_n),
    Button( bg='m', shift = 'mu', key=pygame.K_m),
    Button( bg=','),
-   Button( bg='rshiftkey'),
+   Button( bg='#'),  
+   Button( bg='forwardslash'),   
    Button( bg='up'),
-   Button( bg='forwardslash'),
+   Button( bg='rshiftkey'),
+   Button( bg='delete')
+   
    ],
    
    #row 6
-   [Button( bg='lcontrolkey'),
+   [
+   Button( bg='#'),
+   Button( bg='lcontrolkey'),
    Button( bg='lwin'),
    Button( bg='alt'),
    Button( bg='space'),
