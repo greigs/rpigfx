@@ -31,7 +31,7 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-screenhw = pygame.display.set_mode((1280,720),pygame.HWSURFACE,32)
+screenhw = pygame.display.set_mode((1280,720),pygame.HWSURFACE|pygame.FULLSCREEN,32)
 screen = screenhw.convert_alpha()
 #screenPrescaled = pygame.Surface((800, 480), flags=pygame.HWSURFACE, depth=16)
 windoww = pygame.display.Info().current_w
@@ -72,8 +72,8 @@ while(True):
   screenhw.fill((0,0,0,0))
   screenhw.blit(screen,(0,0), None)
   
-  img = pygame.transform.scale(icons[0].bitmap, (1280,720))
-  screenhw.blit(img,(0,0))
+  img = pygame.transform.scale(icons[0].bitmap, (1400,830))
+  screenhw.blit(img,(-74,-36))
   
   pygame.display.update()
 
