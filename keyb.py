@@ -479,7 +479,7 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-if pygame.display.Info().current_h == 768:
+if pygame.display.Info().current_h == 720:
   screenhw = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN|pygame.SRCALPHA,16)
 else:
   screenhw = pygame.display.set_mode((1366,768),pygame.HWSURFACE,16)
