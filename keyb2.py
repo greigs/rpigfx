@@ -32,18 +32,23 @@ size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
 screenhw = pygame.display.set_mode((1280,720),pygame.HWSURFACE|pygame.FULLSCREEN,32)
+#screenhw = pygame.display.set_mode((1280,720),pygame.HWSURFACE,32)
+
 screen = screenhw.convert_alpha()
 #screenPrescaled = pygame.Surface((800, 480), flags=pygame.HWSURFACE, depth=16)
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
 
 icons = [] # This list gets populated at startup
+index = 0
 
 # Load all icons at startup.
 for file in os.listdir(iconPath):
   if fnmatch.fnmatch(file, '*.png'):
     icons.append(Icon(file.split('.')[0]))
 
+	
+	
 while(True):
 
   keys = None
@@ -60,11 +65,10 @@ while(True):
   
   screen.set_alpha(0)
   screen.fill((0,0,0,0))
-  screen.fill(
-   (255,255,255,100)
+
    #int(pytweening.linear(1.0 - millis ) * 100),
    #int(pytweening.linear(1.0 - millis ) * 50) ,10)
-  )
+  
   #screen.set_alpha(20)
   #screen.fill((0,0,0,0))
   #screen.blit(overlay, (0,0), None, special_flags=BLEND_RGBA_ADD)
@@ -72,8 +76,14 @@ while(True):
   screenhw.fill((0,0,0,0))
   screenhw.blit(screen,(0,0), None)
   
-  img = pygame.transform.scale(icons[0].bitmap, (1400,830))
+  
+  
+  img = pygame.transform.scale(icons[index].bitmap, (1400,830))
   screenhw.blit(img,(-74,-36))
   
   pygame.display.update()
-
+  pygame.time.wait(10000)
+  if (index == icons.length - 1 ):
+    index = 0
+  else:
+    index = index + 1
