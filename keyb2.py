@@ -25,7 +25,7 @@ class Icon:
 
 # Init pygame and screen
 
-iconPath = 'icons'
+iconPath = '/home/pi/rpigfx/icons'
 #os.putenv('SDL_VIDEODRIVER', 'fbcon')
 pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
@@ -41,6 +41,8 @@ windowh = pygame.display.Info().current_h
 
 icons = [] # This list gets populated at startup
 index = 0
+
+pygame.mouse.set_visible(False)
 
 # Load all icons at startup.
 for file in os.listdir(iconPath):
@@ -83,7 +85,7 @@ while(True):
   
   pygame.display.update()
   pygame.time.wait(10000)
-  if (index == icons.length - 1 ):
+  if (index == len(icons) - 1 ):
     index = 0
   else:
     index = index + 1
