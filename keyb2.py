@@ -81,7 +81,7 @@ while(True):
   
   
   img = pygame.transform.scale(icons[index].bitmap, (1400,830))
-  screenhw.blit(img,(-74,-36))
+  screenhw.blit(img,(-85,-30))
   
   pygame.display.update()
   pygame.time.wait(10000)
