@@ -268,12 +268,12 @@ iconsets = []
 
 def myfunc(i):
 	s = 'Message[{0}]'.format(i)
-		n = struct.unpack('I', f.read(4))[0]    # Read str length
-		s = f.read(n)                           # Read str
-		if re.search("[\\a-zA-Z0-9.|]", s):
-		#f.seek(0)                               # Important!!!
-			print (s, end='')
-			sys.stdout.flush()
+	n = struct.unpack('I', f.read(4))[0]    # Read str length
+	s = f.read(n)                           # Read str
+	if re.search("[\\a-zA-Z0-9.|]", s):
+	#f.seek(0)                               # Important!!!
+		print (s, end='')
+		sys.stdout.flush()
 
 # Scan files in a directory, locating JPEGs with names matching the
 # software's convention (IMG_XXXX.JPG), returning a tuple with the
