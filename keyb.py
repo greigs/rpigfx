@@ -13,6 +13,10 @@ import sys
 import pytweening
 from pygame.locals import *
 from subprocess import call  
+from threading import Thread
+
+
+
 
 
 # UI classes ---------------------------------------------------------------
@@ -24,9 +28,9 @@ from subprocess import call
 
 class Icon:
 
-	def __init__(self, name):
+	def __init__(self, name, iconPathLocal):
 	  self.name = name
-	  self.originalbitmap = pygame.image.load(iconPath + '/' + name + '.png').convert(24)
+	  self.originalbitmap = pygame.image.load(iconPathLocal + '/' + name + '.png').convert(24)
 	  #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
 	  self.bitmap = self.originalbitmap.convert(16)
 
@@ -88,9 +92,9 @@ class Button:
 	    return True
 	  return False
 
-	def draw(self, screen):
+	def draw(self, screen, iconPathLocal, loadSet):
 	  if self.shiftimg is None and self.shift is not None:
-	    self.shiftimg = pygame.image.load(iconPath + '/' + self.shift + '.png').convert(16)
+	    self.shiftimg = pygame.image.load(iconPathLocal + '/' + self.shift + '.png').convert(16)
 	    self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
 	  if self.color:
 	    screen.fill(self.color, self.rect)
@@ -98,7 +102,7 @@ class Button:
 	    if shift and self.shift is not None:
 	      img = self.shiftimg
 	    else:
-	      if self.staticBg is None:
+	      if self.staticBg is None or loadSet:
 	        self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
 	      if self.animating:
 	        img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
@@ -139,14 +143,19 @@ storeModePrior  = -1      # Prior storage mode (for detecting changes)
 sizeMode        =  0      # Image size; default = Large
 fxMode          =  0      # Image effect; default = Normal
 isoMode         =  0      # ISO settingl default = Auto
-iconPath        = 'icons' # Subdirectory containing UI bitmaps (PNG format)
+#iconPath        = 'icons' # Subdirectory containing UI bitmaps (PNG format)
 saveIdx         = -1      # Image index for saving (-1 = none set yet)
 loadIdx         = -1      # Image index for loading
 scaled          = None    # pygame Surface w/last-loaded image
+selectedKeyset  = 0
+loadedKeyset    = -1
 
 shift           = False
 
-icons = [] # This list gets populated at startup
+
+fifo = open(r'/tmp/myfifo', 'r+b', 0)
+
+#icons = [] # This list gets populated at startup
 
 # buttons[] is a list of lists; each top-level list element corresponds
 # to one screen mode (e.g. viewfinder, image playback, storage settings),
@@ -155,96 +164,7 @@ icons = [] # This list gets populated at startup
 # declared for each settings screen, rather than a single reusable
 # set); trying to reuse those few elements just made for an ugly
 # tangle of code elsewhere.
-
-buttonsold = [
-   #row 1
-   [Button( bg='adobe_Ai'),
-   Button( bg='adobe_Dw'),
-   Button( bg='adobe_Fl'),
-   Button( bg='adobe_Fw'),
-   Button( bg='adobe_Id'),
-   Button( bg='adobe_Ps'),
-   Button( bg='axialis'),
-   Button( bg='adobe_Ai'),
-   Button( bg='adobe_Dw'),
-   Button( bg='adobe_Fl'),
-   Button( bg='adobe_Fw'),
-   Button( bg='adobe_Id'),
-   Button( bg='adobe_Ps'),
-   Button( bg='axialis')
-   ],
-   
-   #row 2
-   [Button( bg='chrome'),
-   Button( bg='dropbox', key=pygame.K_1),
-   Button( bg='email', key=pygame.K_2),
-   Button( bg='explorer', key=pygame.K_3),
-   Button( bg='firefox', key=pygame.K_4),
-   Button( bg='flashget', key=pygame.K_5),
-   Button( bg='foobar', key=pygame.K_6),
-   Button( bg='chrome', key=pygame.K_7),
-   Button( bg='dropbox', key=pygame.K_8),
-   Button( bg='email', key=pygame.K_9),
-   Button( bg='explorer', key=pygame.K_0),
-   ],
-   
-   #row 3
-   [Button( bg='games'),
-   Button( bg='googleEarth', key=pygame.K_q),
-   Button( bg='handbrake', key=pygame.K_w),
-   Button( bg='mediaPlayer', key=pygame.K_e),
-   Button( bg='notepad', key=pygame.K_r),
-   Button( bg='opera', key=pygame.K_t),
-   Button( bg='safari', key=pygame.K_y),
-   Button( bg='games', key=pygame.K_u),
-   Button( bg='googleEarth', key=pygame.K_i),
-   Button( bg='handbrake', key=pygame.K_o),
-   Button( bg='mediaPlayer', key=pygame.K_p),
-   Button( bg='notepad'),
-   ],
-   
-   #row 4
-   [Button( bg='sonyericsson'),
-   Button( bg='totalCommander', key=pygame.K_a),
-   Button( bg='uTorrent', key=pygame.K_s),
-   Button( bg='vlcPlayer', key=pygame.K_d),
-   Button( bg='webcam', key=pygame.K_f),
-   Button( bg='xbmc', key=pygame.K_g),
-   Button( bg='safari', key=pygame.K_h),
-   Button( bg='sonyericsson', key=pygame.K_j),
-   Button( bg='totalCommander', key=pygame.K_k),
-   Button( bg='uTorrent', key=pygame.K_l),
-   Button( bg='vlcPlayer'),
-   Button( bg='webcam',),
-   ],
-   
-   #row 5
-   [Button( bg='adobe_Ai'),
-   Button( bg='adobe_Dw', key=pygame.K_z),
-   Button( bg='adobe_Fl', key=pygame.K_x),
-   Button( bg='adobe_Fw', key=pygame.K_c),
-   Button( bg='adobe_Id', key=pygame.K_v),
-   Button( bg='adobe_Ps', key=pygame.K_b),
-   Button( bg='axialis', key=pygame.K_n),
-   Button( bg='adobe_Ai', key=pygame.K_m),
-   Button( bg='adobe_Dw'),
-   Button( bg='adobe_Fl'),
-   Button( bg='adobe_Fw'),
-   Button( bg='adobe_Id'),
-   ],
-   
-   #row 6
-   [Button( bg='chrome'),
-   Button( bg='dropbox'),
-   Button( bg='email'),
-   Button( bg='explorer'),
-   Button( bg='firefox'),
-   Button( bg='flashget'),
-   Button( bg='foobar'),
-   Button( bg='chrome'),
-   ]
-   
-]
+keysets = ["icons_set1", "icons_set2"]
 
 buttons = [
    #row 1
@@ -344,6 +264,16 @@ buttons = [
    
 ]
 
+iconsets = []
+
+def myfunc(i):
+	s = 'Message[{0}]'.format(i)
+		n = struct.unpack('I', f.read(4))[0]    # Read str length
+		s = f.read(n)                           # Read str
+		if re.search("[\\a-zA-Z0-9.|]", s):
+		#f.seek(0)                               # Important!!!
+			print (s, end='')
+			sys.stdout.flush()
 
 # Scan files in a directory, locating JPEGs with names matching the
 # software's convention (IMG_XXXX.JPG), returning a tuple with the
@@ -421,21 +351,14 @@ pygame.display.set_caption('')
 
 
 # Load all icons at startup.
-for file in os.listdir(iconPath):
-  if fnmatch.fnmatch(file, '*.png'):
-    icons.append(Icon(file.split('.')[0]))
+for iconPathLocal in keysets:
+  icons = []
+  for file in os.listdir(iconPathLocal):
+    if fnmatch.fnmatch(file, '*.png'):
+      icons.append(Icon(file.split('.')[0], iconPathLocal))
+  iconsets.append(icons)
 
 # Assign Icons to Buttons, now that they're loaded
-for s in buttons:        # For each screenful of buttons...
-  for b in s:            #  For each button on screen...
-    for i in icons:      #   For each icon...
-      if b.bg == i.name: #    Compare names; match?
-        b.iconBg = i     #     Assign Icon to Button
-        b.bg     = None  #     Name no longer used; allow garbage collection
-      if b.fg == i.name:
-        b.iconFg = i
-        b.fg     = None
-
 
 # Main loop ----------------------------------------------------------------
 framecount = 0
@@ -443,7 +366,35 @@ framecount = 0
 FPS = 60
 # How many seconds the "game" is played.
 playtime = 0.0
+loadset = False
+
+
+
+for i in range(10):
+    t = Thread(target=myfunc, args=(i,))
+    t.start()
+
 while(True):
+
+  if framecount > 100:
+    selectedKeyset = 1
+  
+  
+  if selectedKeyset != loadedKeyset:
+    for s in buttons:        # For each screenful of buttons...
+		  for b in s:            #  For each button on screen...
+			for i in iconsets[selectedKeyset]:      #   For each icon...
+			  if b.bg == i.name: #    Compare names; match?
+				b.iconBg = i     #     Assign Icon to Button
+				#b.bg     = None  #     Name no longer used; allow garbage collection # TODO GrS - decide to remove or not
+			  if b.fg == i.name:
+				b.iconFg = i
+				#b.fg     = None
+    loadset = True
+    loadedKeyset = selectedKeyset
+  else:
+    loadset = False
+
   # Do not go faster than this framerate.
   milliseconds = clock.tick(FPS) 
   playtime += milliseconds / 1000.0 
@@ -591,17 +542,17 @@ while(True):
     apply_animation(b,keys,w,h, reverseanimation) 
 
   for i,b in enumerate(reversed(buttons[5])):
-    b.draw(screenPrescaled)
+    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[4])):
-    b.draw(screenPrescaled)
+    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[3])):
-    b.draw(screenPrescaled)
+    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[2])):
-    b.draw(screenPrescaled)
+    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[1])):
-    b.draw(screenPrescaled)
+    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[0])):
-    b.draw(screenPrescaled)
+    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
 
   draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS".format(
                            clock.get_fps(), " "*5, playtime), windoww, windowh)
@@ -610,7 +561,7 @@ while(True):
   
   
   overlay.fill((int(pytweening.linear(millis ) * 100),int(pytweening.linear(1.0 - millis ) * 100),int(pytweening.linear(1.0 - millis ) * 50),0))
-  screen.blit(overlay, (0,0), None, BLEND_MIN)
+  #screen.blit(overlay, (0,0), None, BLEND_MIN)
   
   pygame.display.update()
  
