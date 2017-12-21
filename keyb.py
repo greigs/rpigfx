@@ -10,6 +10,8 @@ import stat
 import threading
 import time
 import sys
+import rs
+import struct
 import pytweening
 from pygame.locals import *
 from subprocess import call  
