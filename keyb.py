@@ -269,7 +269,7 @@ buttons = [
 iconsets = []
 
 def myfunc(i):
-	n = struct.unpack('I', fifio.read(4))[0]    # Read str length
+	n = struct.unpack('I', fifo.read(4))[0]    # Read str length
 	s = fifo.read(n)                           # Read str
 	if re.search("[\\a-zA-Z0-9.|]", s):
 	#f.seek(0)                               # Important!!!
@@ -371,9 +371,8 @@ loadset = False
 
 
 
-for i in range(10):
-    t = Thread(target=myfunc, args=(i,))
-    t.start()
+t = Thread(target=myfunc, args=(i,))
+t.start()
 
 while(True):
 
