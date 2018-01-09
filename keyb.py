@@ -30,11 +30,11 @@ from threading import Thread
 
 class Icon:
 
-	def __init__(self, name, iconPathLocal):
-	  self.name = name
-	  self.originalbitmap = pygame.image.load(iconPathLocal + '/' + name + '.png').convert(24)
-	  #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
-	  self.bitmap = self.originalbitmap.convert(16)
+  def __init__(self, name, iconPathLocal):
+    self.name = name
+    self.originalbitmap = pygame.image.load(iconPathLocal + '/' + name + '.png').convert(24)
+    #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
+    self.bitmap = self.originalbitmap.convert(16)
 
 
 
@@ -56,78 +56,78 @@ class Icon:
 
 class Button:
 
-	def __init__(self, **kwargs):
-	  self.key      = None # the key
-	  self.color    = None # Background fill color, if any
-	  self.iconBg   = None # Background Icon (atop color fill)
-	  self.staticBg = None # 
-	  self.animating= False
-	  self.iconFg   = None # Foreground Icon (atop background)
-	  self.bg       = None # Background Icon name
-	  self.fg       = None # Foreground Icon name
-	  self.callback = None # Callback function
-	  self.value    = None # Value passed to callback
-	  self.w        = None
-	  self.h        = None
-	  self.shift    = None
-	  self.shiftimg = None
-	  for key, value in kwargs.iteritems():
-	    if   key == 'color': self.color    = value
-	    elif key == 'bg'   : self.bg       = value
-	    elif key == 'fg'   : self.fg       = value
-	    elif key == 'cb'   : self.callback = value
-	    elif key == 'value': self.value    = value
-	    elif key == 'key'  : self.key      = value
-	    elif key == 'shift': self.shift    = value
+  def __init__(self, **kwargs):
+    self.key      = None # the key
+    self.color    = None # Background fill color, if any
+    self.iconBg   = None # Background Icon (atop color fill)
+    self.staticBg = None # 
+    self.animating= False
+    self.iconFg   = None # Foreground Icon (atop background)
+    self.bg       = None # Background Icon name
+    self.fg       = None # Foreground Icon name
+    self.callback = None # Callback function
+    self.value    = None # Value passed to callback
+    self.w        = None
+    self.h        = None
+    self.shift    = None
+    self.shiftimg = None
+    for key, value in kwargs.iteritems():
+      if   key == 'color': self.color    = value
+      elif key == 'bg'   : self.bg       = value
+      elif key == 'fg'   : self.fg       = value
+      elif key == 'cb'   : self.callback = value
+      elif key == 'value': self.value    = value
+      elif key == 'key'  : self.key      = value
+      elif key == 'shift': self.shift    = value
 
 
-	def selected(self, pos):
-	  x1 = self.rect[0]
-	  y1 = self.rect[1]
-	  x2 = x1 + self.rect[2] - 1
-	  y2 = y1 + self.rect[3] - 1
-	  if ((pos[0] >= x1) and (pos[0] <= x2) and
-	      (pos[1] >= y1) and (pos[1] <= y2)):
-	    if self.callback:
-	      if self.value is None: self.callback()
-	      else:                  self.callback(self.value)
-	    return True
-	  return False
+  def selected(self, pos):
+    x1 = self.rect[0]
+    y1 = self.rect[1]
+    x2 = x1 + self.rect[2] - 1
+    y2 = y1 + self.rect[3] - 1
+    if ((pos[0] >= x1) and (pos[0] <= x2) and
+        (pos[1] >= y1) and (pos[1] <= y2)):
+      if self.callback:
+        if self.value is None: self.callback()
+        else:                  self.callback(self.value)
+      return True
+    return False
 
-	def draw(self, screen, iconPathLocal, loadSet):
-	  if self.shiftimg is None and self.shift is not None:
-	    self.shiftimg = pygame.image.load(iconPathLocal + '/' + self.shift + '.png').convert(16)
-	    self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
-	  if self.color:
-	    screen.fill(self.color, self.rect)
-	  if self.iconBg:
-	    if shift and self.shift is not None:
-	      img = self.shiftimg
-	    else:
-	      if self.staticBg is None or loadSet:
-	        self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
-	      if self.animating:
-	        img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
-	      else:
-	        img = self.staticBg
-	    #img = self.iconBg.bitmap
-	    #img.set_alpha(255)
-	    screen.blit(img,(self.rect[0],self.rect[1]))
-	  if self.iconFg:
-	    img = pygame.transform.scale(self.iconFg.bitmap, (self.w,self.h))
-	    #img.set_alpha(255)
-	    screen.blit(img,
-	      (self.rect[0],
-	       self.rect[1]))
+  def draw(self, screen, iconPathLocal, loadSet):
+    if self.shiftimg is None and self.shift is not None:
+      self.shiftimg = pygame.image.load(iconPathLocal + '/' + self.shift + '.png').convert(16)
+      self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
+    if self.color:
+      screen.fill(self.color, self.rect)
+    if self.iconBg:
+      if shift and self.shift is not None:
+        img = self.shiftimg
+      else:
+        if self.staticBg is None or loadSet:
+          self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
+        if self.animating:
+          img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
+        else:
+          img = self.staticBg
+      #img = self.iconBg.bitmap
+      #img.set_alpha(255)
+      screen.blit(img,(self.rect[0],self.rect[1]))
+    if self.iconFg:
+      img = pygame.transform.scale(self.iconFg.bitmap, (self.w,self.h))
+      #img.set_alpha(255)
+      screen.blit(img,
+        (self.rect[0],
+         self.rect[1]))
 
-	def setBg(self, name):
-	  if name is None:
-	    self.iconBg = None
-	  else:
-	    for i in icons:
-	      if name == i.name:
-	        self.iconBg = i
-	        break
+  def setBg(self, name):
+    if name is None:
+      self.iconBg = None
+    else:
+      for i in icons:
+        if name == i.name:
+          self.iconBg = i
+          break
 
 
 # UI callbacks -------------------------------------------------------------
@@ -268,39 +268,37 @@ buttons = [
 
 iconsets = []
 
-def fifoThread():
-  while(True):
-    time.sleep(0.2)
-    n = struct.unpack('I', fifo.read(4))[0]    # Read str length
-    s = fifo.read(n)                           # Read str
-    if re.search("[\\a-zA-Z0-9.|]", s):
-    #f.seek(0)                               # Important!!!
-      print (s)
-      sys.stdout.flush()
+def myfunc(i):
+  n = struct.unpack('I', fifo.read(4))[0]    # Read str length
+  s = fifo.read(n)                           # Read str
+  if re.search("[\\a-zA-Z0-9.|]", s):
+  #f.seek(0)                               # Important!!!
+    print (s, end='')
+    sys.stdout.flush()
 
 # Scan files in a directory, locating JPEGs with names matching the
 # software's convention (IMG_XXXX.JPG), returning a tuple with the
 # lowest and highest indices (or None if no matching files).
 def imgRange(path):
-	min = 9999
-	max = 0
-	try:
-	  for file in os.listdir(path):
-	    if fnmatch.fnmatch(file, 'IMG_[0-9][0-9][0-9][0-9].JPG'):
-	      i = int(file[4:8])
-	      if(i < min): min = i
-	      if(i > max): max = i
-	finally:
-	  return None if min > max else (min, max)
+  min = 9999
+  max = 0
+  try:
+    for file in os.listdir(path):
+      if fnmatch.fnmatch(file, 'IMG_[0-9][0-9][0-9][0-9].JPG'):
+        i = int(file[4:8])
+        if(i < min): min = i
+        if(i > max): max = i
+  finally:
+    return None if min > max else (min, max)
 
 
 def draw_text(screen, font, text, surfacewidth, surfaceheight):
-	"""Center text in window
-	"""
-	fw, fh = font.size(text) # fw: font width,  fh: font height
-	surface = font.render(text, True, (0, 0, 255))
-	# // makes integer division in python3 
-	screen.blit(surface, (0,0))
+  """Center text in window
+  """
+  fw, fh = font.size(text) # fw: font width,  fh: font height
+  surface = font.render(text, True, (0, 0, 255))
+  # // makes integer division in python3 
+  screen.blit(surface, (0,0))
 
 def apply_animation(b,keys,w,h, reverseanimation):
     if keys is not None and b.key is not None and len(keys) > 0 and keys[b.key]:
@@ -373,7 +371,7 @@ loadset = False
 
 
 
-t = Thread(target=fifoThread)
+t = Thread(target=myfunc, args=(i,))
 t.start()
 
 while(True):
@@ -384,14 +382,14 @@ while(True):
   
   if selectedKeyset != loadedKeyset:
     for s in buttons:        # For each screenful of buttons...
-		  for b in s:            #  For each button on screen...
-			for i in iconsets[selectedKeyset]:      #   For each icon...
-			  if b.bg == i.name: #    Compare names; match?
-				b.iconBg = i     #     Assign Icon to Button
-				#b.bg     = None  #     Name no longer used; allow garbage collection # TODO GrS - decide to remove or not
-			  if b.fg == i.name:
-				b.iconFg = i
-				#b.fg     = None
+      for b in s:            #  For each button on screen...
+      for i in iconsets[selectedKeyset]:      #   For each icon...
+        if b.bg == i.name: #    Compare names; match?
+        b.iconBg = i     #     Assign Icon to Button
+        #b.bg     = None  #     Name no longer used; allow garbage collection # TODO GrS - decide to remove or not
+        if b.fg == i.name:
+        b.iconFg = i
+        #b.fg     = None
     loadset = True
     loadedKeyset = selectedKeyset
   else:
@@ -498,7 +496,7 @@ while(True):
     h = normalheight
     if i == 0:
       lft = 0
-      w = row4key0w	
+      w = row4key0w  
     elif i == 13:
       w = row4key13w
       lft = ((i - 1) * (spacinghor + normalwidth)) + row4key13w + spacinghor + row4key13spacing
