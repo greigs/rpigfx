@@ -267,13 +267,15 @@ buttons = [
 
 iconsets = []
 
-def myfunc(i):
-  n = struct.unpack('I', fifo.read(4))[0]    # Read str length
-  s = fifo.read(n)                           # Read str
-  if re.search("[\\a-zA-Z0-9.|]", s):
-  #f.seek(0)                               # Important!!!
-    print (s)
-    sys.stdout.flush()
+def fifoLoop(i):
+  while True:
+    time.sleep(0.2)
+    n = struct.unpack('I', fifo.read(4))[0]    # Read str length
+    s = fifo.read(n)                           # Read str
+    if re.search("[\\a-zA-Z0-9.|]", s):
+    #f.seek(0)                               # Important!!!
+      print (s)
+      sys.stdout.flush()
 
 # Scan files in a directory, locating JPEGs with names matching the
 # software's convention (IMG_XXXX.JPG), returning a tuple with the
@@ -370,7 +372,7 @@ loadset = False
 
 
 
-t = Thread(target=myfunc, args=(i,))
+t = Thread(target=fifoLoop)
 t.start()
 
 while(True):
