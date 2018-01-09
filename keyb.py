@@ -383,13 +383,13 @@ while(True):
   if selectedKeyset != loadedKeyset:
     for s in buttons:        # For each screenful of buttons...
       for b in s:            #  For each button on screen...
-      for i in iconsets[selectedKeyset]:      #   For each icon...
-        if b.bg == i.name: #    Compare names; match?
-        b.iconBg = i     #     Assign Icon to Button
-        #b.bg     = None  #     Name no longer used; allow garbage collection # TODO GrS - decide to remove or not
-        if b.fg == i.name:
-        b.iconFg = i
-        #b.fg     = None
+        for i in iconsets[selectedKeyset]:      #   For each icon...
+          if b.bg == i.name: #    Compare names; match?
+          b.iconBg = i     #     Assign Icon to Button
+          #b.bg     = None  #     Name no longer used; allow garbage collection # TODO GrS - decide to remove or not
+          if b.fg == i.name:
+          b.iconFg = i
+          #b.fg     = None
     loadset = True
     loadedKeyset = selectedKeyset
   else:
