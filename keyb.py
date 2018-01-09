@@ -8,7 +8,7 @@ import os.path
 import pygame
 import stat
 import threading
-import rs
+import re
 import time
 import sys
 import struct
