@@ -267,7 +267,7 @@ buttons = [
 
 iconsets = []
 
-def fifoLoop(i):
+def fifoLoop():
   while True:
     time.sleep(0.2)
     n = struct.unpack('I', fifo.read(4))[0]    # Read str length
