@@ -273,7 +273,7 @@ def myfunc(i):
   s = fifo.read(n)                           # Read str
   if re.search("[\\a-zA-Z0-9.|]", s):
   #f.seek(0)                               # Important!!!
-    print (s, end='')
+    print (s)
     sys.stdout.flush()
 
 # Scan files in a directory, locating JPEGs with names matching the
