@@ -27,7 +27,7 @@ class Pipes(object):
     char = self.fifo.read(1)  # read a single character
     if char == "S":
       self.startedword = True
-    if self.startedword and !self.confirmedword:
+    if self.startedword and not self.confirmedword:
       self.startedwordcount = self.startedwordcount + 1
       if self.startedwordcount < 4 and char == "T":
         self.confirmedword = True
