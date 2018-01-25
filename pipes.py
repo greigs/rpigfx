@@ -21,7 +21,7 @@ class Pipes(object):
   startedwordcount = 0
 
   def __init__(self):
-    self.fifo = open(r'/tmp/myfifo', 'r+b', 0)
+    self.fifo = open(r'/tmp/myfifo', 'r+b', buffering=None)
 
   def run(self):
     char = self.fifo.read(1)  # read a single character
@@ -31,10 +31,10 @@ class Pipes(object):
         self.startedword = True
     elif self.startedword and not self.confirmedword:
       self.startedwordcount = self.startedwordcount + 1
-      if self.startedwordcount < 6 and char == "T":
+      if self.startedwordcount < 5 and char == "T":
         self.confirmedword = True
         self.word1 = "ST"
-      elif self.startedwordcount >= 6:
+      elif self.startedwordcount >= 5:
         self.reset_msg()
     elif self.confirmedword and re.search("[\\a-zA-Z0-9.|]", char):
       #print (s, end='')
