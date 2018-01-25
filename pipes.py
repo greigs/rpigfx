@@ -25,12 +25,16 @@ class Pipes(object):
 
   def run(self):
     char = self.fifo.read(1)  # read a single character
-    if char == "S":
-      self.startedword = True
-    if self.startedword and not self.confirmedword:
+    if not self.startedword:
+      if char == "S":
+        self.word1 = "S"
+        self.startedword = True
+    elif self.startedword and not self.confirmedword:
       self.startedwordcount = self.startedwordcount + 1
       if self.startedwordcount < 4 and char == "T":
         self.confirmedword = True
+      elif self.startedwordcount >= 4:
+        self.reset_msg()
     if self.confirmedword and re.search("[\\a-zA-Z0-9.|]", char):
       #print (s, end='')
       # sys.stdout.flush()
