@@ -16,6 +16,7 @@ import pytweening
 from pygame.locals import *
 from subprocess import call
 from threading import Thread
+from pipes import Pipes
 
 
 
@@ -149,13 +150,12 @@ isoMode         =  0      # ISO settingl default = Auto
 saveIdx         = -1      # Image index for saving (-1 = none set yet)
 loadIdx         = -1      # Image index for loading
 scaled          = None    # pygame Surface w/last-loaded image
-selectedKeyset  = 0
+global selectedKeyset
+selectedKeyset = 0
 loadedKeyset    = -1
 
 shift           = False
-
-
-fifo = open(r'/tmp/myfifo', 'r+b', 0)
+msg             = ""
 
 #icons = [] # This list gets populated at startup
 
@@ -269,14 +269,21 @@ buttons = [
 iconsets = []
 
 def fifoLoop():
+  msg = ""
+  pipes = Pipes()
   while True:
-    time.sleep(0.2)
-    n = struct.unpack('I', fifo.read(4))[0]    # Read str length
-    s = fifo.read(n)                           # Read str
-    if re.search("[\\a-zA-Z0-9.|]", s):
-    #f.seek(0)                               # Important!!!
-      print (s)
-      sys.stdout.flush()
+    pipes.run()
+    if pipes.msgcomplete:
+      if msg != pipes.msg:
+        if selectedKeyset == 1:
+          selectedKeyset = 0
+        else:
+          selectedKeyset = 1
+      msg = pipes.msg
+      pipes.reset_msg()
+
+
+
 
 # Scan files in a directory, locating JPEGs with names matching the
 # software's convention (IMG_XXXX.JPG), returning a tuple with the
