@@ -269,6 +269,7 @@ buttons = [
 iconsets = []
 
 def fifoLoop():
+  global selectedKeyset
   msg = ""
   pipes = Pipes()
   while True:
@@ -280,6 +281,7 @@ def fifoLoop():
         else:
           selectedKeyset = 1
       msg = pipes.msg
+      print(msg)
       pipes.reset_msg()
 
 
