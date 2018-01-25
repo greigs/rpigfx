@@ -31,10 +31,10 @@ class Pipes(object):
         self.startedword = True
     elif self.startedword and not self.confirmedword:
       self.startedwordcount = self.startedwordcount + 1
-      if self.startedwordcount < 5 and char == "T":
+      if self.startedwordcount < 6 and char == "T":
         self.confirmedword = True
         self.word1 = "ST"
-      elif self.startedwordcount >= 5:
+      elif self.startedwordcount >= 6:
         self.reset_msg()
     elif self.confirmedword and re.search("[\\a-zA-Z0-9.|]", char):
       #print (s, end='')
