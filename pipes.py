@@ -33,9 +33,10 @@ class Pipes(object):
       self.startedwordcount = self.startedwordcount + 1
       if self.startedwordcount < 4 and char == "T":
         self.confirmedword = True
+        self.word1 = "ST"
       elif self.startedwordcount >= 4:
         self.reset_msg()
-    if self.confirmedword and re.search("[\\a-zA-Z0-9.|]", char):
+    elif self.confirmedword and re.search("[\\a-zA-Z0-9.|]", char):
       #print (s, end='')
       # sys.stdout.flush()
       if self.word1complete:
