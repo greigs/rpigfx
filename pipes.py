@@ -21,7 +21,7 @@ class Pipes(object):
   startedwordcount = 0
 
   def __init__(self):
-    self.fifo = open(r'/tmp/myfifo', 'r+b', buffering=None)
+    self.fifo = open(r'/tmp/myfifo', 'r+b', buffering=0)
 
   def run(self):
     char = self.fifo.read(1)  # read a single character
