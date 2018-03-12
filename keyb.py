@@ -153,6 +153,7 @@ scaled          = None    # pygame Surface w/last-loaded image
 global selectedKeyset
 selectedKeyset = 0
 loadedKeyset    = -1
+enableFifoLoop = False
 
 shift           = False
 msg             = ""
@@ -381,9 +382,9 @@ playtime = 0.0
 loadset = False
 
 
-
-t = Thread(target=fifoLoop)
-t.start()
+if enableFifoLoop:
+  t = Thread(target=fifoLoop)
+  t.start()
 
 while(True):  
   
