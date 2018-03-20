@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SixLabors.ImageSharp;
@@ -140,26 +141,41 @@ namespace imagecut
             float keyspacinghorizontal = 31.3f;
             float startHeight = 32;
             float startWidth = 33;
-          
+            List<RectangleF> rects = new List<RectangleF>();
 
             int rowNum = 0;
             foreach (var row in keyInfos)
             {
                 
                 int keyInColumn = 0;
+
+                // the 
+                var prevWidth = startWidth + row.Take(keyInColumn).Sum(x =>
+                                    (x.WidthMultiplier * keywidth) + (x.XGapMultiplier * keyspacinghorizontal));
+                var xPoint = prevWidth;
+                var yPoint = startHeight + keyInfos.Take(rowNum).Sum(y => keyheight + y.First().HeightGapMultiplier * keyspacingvertical);  //rowNum * (keyheight + keyspacingvertical);
+                var rect = new RectangleF(xPoint, yPoint, keywidth * row[0].WidthMultiplier, keyheight);
+                var clone = img.Clone();
+                clone.Mutate(x => x.Crop(new Rectangle((int)rect.Left, (int)rect.Top, (int)rect.Width, (int)rect.Height)));
+                clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + keyInColumn + ".png"));
+                clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + keyInColumn + "_shift.png"));
+                rects.Add(rect);
+
                 foreach (var key in row)
                 {
-                    var prevWidth = startWidth + row.Take(keyInColumn).Sum(x =>
+                    prevWidth = startWidth + row.Take(keyInColumn).Sum(x =>
                         (x.WidthMultiplier * keywidth) + (x.XGapMultiplier * keyspacinghorizontal));
-                    var xPoint = prevWidth;
-                    var yPoint = startHeight + keyInfos.Take(rowNum).Sum(y => keyheight + y.First().HeightGapMultiplier * keyspacingvertical);  //rowNum * (keyheight + keyspacingvertical);
-                    var rect = new RectangleF(xPoint, yPoint, keywidth * key.WidthMultiplier, keyheight);
+                    xPoint = prevWidth;
+                    yPoint = startHeight + keyInfos.Take(rowNum).Sum(y => keyheight + y.First().HeightGapMultiplier * keyspacingvertical);  //rowNum * (keyheight + keyspacingvertical);
+                    rect = new RectangleF(xPoint, yPoint, keywidth * key.WidthMultiplier, keyheight);
+                    rects.Add(rect);
                     var r = new RectangularePolygon(rect);
                     
 
-                    var clone = img.Clone();
+                    clone = img.Clone();
                     clone.Mutate(x => x.Crop(new Rectangle((int)rect.Left, (int)rect.Top, (int)rect.Width, (int)rect.Height)));
-                    clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + keyInColumn + "_" + key.Name + ".png"));
+                    clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + (keyInColumn + 1) + ".png"));
+                    clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + (keyInColumn + 1) + "_shift.png"));
                     keyInColumn++;
 
                     img.Mutate(x => x.Draw(new Pen<Rgba32>(Rgba32.Red, 1), r));
@@ -170,6 +186,12 @@ namespace imagecut
             }
 
             img.SaveAsPng(File.OpenWrite("C:\\out\\out.png"));
+            if (File.Exists("C:\\out\\out.txt"))
+            {
+                File.Delete("C:\\out\\out.txt");
+            }
+
+            File.WriteAllLines("C:\\out\\out.txt", rects.Select(x => $"{Math.Round(x.X) },{Math.Round(x.Y)},{Math.Round(x.Width)},{Math.Round(x.Height)}"));
         }
     }
 }

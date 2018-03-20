@@ -97,7 +97,7 @@ class Button:
 
   def draw(self, screen, iconPathLocal, loadSet):
     if self.shiftimg is None and self.shift is not None:
-      self.shiftimg = pygame.image.load(iconPathLocal + '/' + self.shift + '.png').convert(16)
+      self.shiftimg = pygame.image.load(iconPathLocal + '/' + self.iconBg.name.split('.')[0] + '_shift.png').convert(16)
       self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
     if self.color:
       screen.fill(self.color, self.rect)
@@ -154,6 +154,7 @@ global selectedKeyset
 selectedKeyset = 0
 loadedKeyset    = -1
 enableFifoLoop = False
+rowNums = [15,15,15,14,15,11]
 
 shift           = False
 msg             = ""
@@ -167,105 +168,17 @@ msg             = ""
 # declared for each settings screen, rather than a single reusable
 # set); trying to reuse those few elements just made for an ugly
 # tangle of code elsewhere.
-keysets = ["icons_set1", "icons_set2"]
+keysets = ["premier"]
 
-buttons = [
-   #row 1
-   [Button( bg='escape'),
-   Button( bg='f1'),
-   Button( bg='f2'),
-   Button( bg='f3'),
-   Button( bg='f4'),
-   Button( bg='f5'),
-   Button( bg='f6'),
-   Button( bg='f7'),
-   Button( bg='f8'),
-   Button( bg='f9'),
-   Button( bg='f10'),
-   Button( bg='f11'),
-   Button( bg='f12'),
-   Button( bg='printscreen')
-   ],
-   
-   #row 2
-   [
-   Button( bg='~'),
-   Button( bg='1', key=pygame.K_1),
-   Button( bg='2', key=pygame.K_2),
-   Button( bg='3', key=pygame.K_3),
-   Button( bg='4', key=pygame.K_4),
-   Button( bg='5', key=pygame.K_5),
-   Button( bg='6', key=pygame.K_6),
-   Button( bg='7', key=pygame.K_7),
-   Button( bg='8', key=pygame.K_8),
-   Button( bg='9', key=pygame.K_9),
-   Button( bg='0', key=pygame.K_0),
-   Button( bg='-'),
-   Button( bg='+'),
-   Button( bg='oemclear'),
-   ],
-   
-   #row 3
-   [Button( bg='tab'),
-   Button( bg='q', shift = 'qu', key=pygame.K_q),
-   Button( bg='w', shift = 'wu', key=pygame.K_w),
-   Button( bg='e', shift = 'eu', key=pygame.K_e),
-   Button( bg='r', shift = 'ru', key=pygame.K_r),
-   Button( bg='t', shift = 'tu', key=pygame.K_t),
-   Button( bg='y', shift = 'yu', key=pygame.K_y),
-   Button( bg='u', shift = 'uu', key=pygame.K_u),
-   Button( bg='i', shift = 'iu', key=pygame.K_i),
-   Button( bg='o', shift = 'ou', key=pygame.K_o),
-   Button( bg='p', shift = 'pu', key=pygame.K_p),
-   Button( bg='['),
-   Button( bg=']'),
-   Button( bg='return'),
-   ],
-   
-   #row 4
-   [Button( bg='capital'),
-   Button( bg='a', shift = 'au', key=pygame.K_a),
-   Button( bg='s', shift = 'su', key=pygame.K_s),
-   Button( bg='d', shift = 'du', key=pygame.K_d),
-   Button( bg='f', shift = 'fu', key=pygame.K_f),
-   Button( bg='g', shift = 'gu', key=pygame.K_g),
-   Button( bg='h', shift = 'hu', key=pygame.K_h),
-   Button( bg='j', shift = 'ju', key=pygame.K_j),
-   Button( bg='k', shift = 'ku', key=pygame.K_k),
-   Button( bg='l', shift = 'lu', key=pygame.K_l),
-   Button( bg=';'),
-   Button( bg='#'),
-   Button( bg='#'),
-   Button( bg='#'),
-   ],
-   
-   #row 5
-   [Button( bg='lshiftkey'),
-   Button( bg='z', shift = 'zu', key=pygame.K_z),
-   Button( bg='x', shift = 'xu', key=pygame.K_x),
-   Button( bg='c', shift = 'cu', key=pygame.K_c),
-   Button( bg='v', shift = 'vu', key=pygame.K_v),
-   Button( bg='b', shift = 'bu', key=pygame.K_b),
-   Button( bg='n', shift = 'nu', key=pygame.K_n),
-   Button( bg='m', shift = 'mu', key=pygame.K_m),
-   Button( bg=','),
-   Button( bg='rshiftkey'),
-   Button( bg='up'),
-   Button( bg='forwardslash'),
-   ],
-   
-   #row 6
-   [Button( bg='lcontrolkey'),
-   Button( bg='lwin'),
-   Button( bg='alt'),
-   Button( bg='space'),
-   Button( bg='alt'),
-   Button( bg='left'),
-   Button( bg='down'),
-   Button( bg='right'),
-   ]
-   
-]
+buttons = []
+rowNum = 0
+for row in rowNums:
+  thisrow = []
+  for key in range(0,row):
+    butName = str(rowNum) + "_" + str(key)
+    thisrow.append(Button(bg = butName))
+  buttons.append(thisrow)
+  rowNum += 1
 
 iconsets = []
 
@@ -366,9 +279,9 @@ pygame.display.set_caption('')
 # Load all icons at startup.
 for iconPathLocal in keysets:
   icons = []
-  for file in os.listdir(iconPathLocal):
+  for file in os.listdir('keysets\\' + iconPathLocal):
     if fnmatch.fnmatch(file, '*.png'):
-      icons.append(Icon(file.split('.')[0], iconPathLocal))
+      icons.append(Icon(file.split('.')[0], 'keysets\\' + iconPathLocal))
   iconsets.append(icons)
 
 # Assign Icons to Buttons, now that they're loaded
@@ -451,14 +364,22 @@ while(True):
   reverseanimation = (millis > 500)
   millis = millis / 1000
 
-  
+  with open('keysets\premier\out.txt') as f:
+    lines = [line.rstrip('\n') for line in f]
+  keycount = 0
+  scale = 0.5
+
+
   # Row 1
   for i,b in enumerate(buttons[0]):
-    w = topwidth
-    h = topheight
-    lft = leftpadding + (i * (spacinghor + topwidth))
-    b.rect = ( lft, top, 0, 0)
+    k = lines[keycount].split(',')
+    w = int(round( int(k[2]) * scale ))
+    h = int(round(int(k[3]) * scale))
+    lft = int(round(int(k[0]) * scale))
+    tp = int(round(int(k[1]) * scale))
+    b.rect = ( lft, tp, w, h)
     apply_animation(b,keys,w,h, reverseanimation)
+    keycount += 1
     
   # Row 2
   top = top + topheight + spacingver
@@ -550,17 +471,17 @@ while(True):
     apply_animation(b,keys,w,h, reverseanimation) 
 
   for i,b in enumerate(reversed(buttons[5])):
-    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
+    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[4])):
-    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
+    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[3])):
-    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
+    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[2])):
-    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
+    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[1])):
-    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
+    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
   for i,b in enumerate(reversed(buttons[0])):
-    b.draw(screenPrescaled, keysets[selectedKeyset], loadset)
+    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
 
   draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS".format(
                            clock.get_fps(), " "*5, playtime), windoww, windowh)
