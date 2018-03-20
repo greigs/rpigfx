@@ -352,86 +352,21 @@ while(True):
   scale = 0.5
 
 
-  # Row 1
-  for i,b in enumerate(buttons[0]):
-    k = lines[keycount].split(',')
-    w = int(round( int(k[2]) * scale ))
-    h = int(round(int(k[3]) * scale))
-    lft = int(round(int(k[0]) * scale))
-    tp = int(round(int(k[1]) * scale))
-    b.rect = ( lft, tp, w, h)
-    apply_animation(b,keys,w,h, reverseanimation)
-    keycount += 1
+  for row in range(6):
+    for i,b in enumerate(buttons[row]):
+      k = lines[keycount].split(',')
+      w = int(round( int(k[2]) * scale ))
+      h = int(round(int(k[3]) * scale))
+      lft = int(round(int(k[0]) * scale))
+      tp = int(round(int(k[1]) * scale))
+      b.rect = ( lft, tp, w, h)
+      apply_animation(b,keys,w,h, reverseanimation)
+      keycount += 1
     
-  # Row 2
-  for i,b in enumerate(buttons[1]):
-    k = lines[keycount].split(',')
-    w = int(round( int(k[2]) * scale ))
-    h = int(round(int(k[3]) * scale))
-    lft = int(round(int(k[0]) * scale))
-    tp = int(round(int(k[1]) * scale))
-    b.rect = ( lft, tp, w, h)
-    apply_animation(b,keys,w,h, reverseanimation)
-    keycount += 1  
+  for row in range(5, -1, -1):
+    for i,b in enumerate(reversed(buttons[row])):
+      b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
 
-  # Row 3
-  for i,b in enumerate(buttons[2]):
-    k = lines[keycount].split(',')
-    w = int(round( int(k[2]) * scale ))
-    h = int(round(int(k[3]) * scale))
-    lft = int(round(int(k[0]) * scale))
-    tp = int(round(int(k[1]) * scale))
-    b.rect = ( lft, tp, w, h)
-    apply_animation(b,keys,w,h, reverseanimation)
-    keycount += 1      
-
-  # Row 4
-  for i,b in enumerate(buttons[3]):
-    k = lines[keycount].split(',')
-    w = int(round( int(k[2]) * scale ))
-    h = int(round(int(k[3]) * scale))
-    lft = int(round(int(k[0]) * scale))
-    tp = int(round(int(k[1]) * scale))
-    b.rect = ( lft, tp, w, h)
-    apply_animation(b,keys,w,h, reverseanimation)
-    keycount += 1  
-
-  # Row 5
-  for i,b in enumerate(buttons[4]):
-    k = lines[keycount].split(',')
-    w = int(round( int(k[2]) * scale ))
-    h = int(round(int(k[3]) * scale))
-    lft = int(round(int(k[0]) * scale))
-    tp = int(round(int(k[1]) * scale))
-    b.rect = ( lft, tp, w, h)
-    apply_animation(b,keys,w,h, reverseanimation)
-    keycount += 1     
-
-  # Row 6
-  for i,b in enumerate(buttons[5]):
-    k = lines[keycount].split(',')
-    w = int(round( int(k[2]) * scale ))
-    h = int(round(int(k[3]) * scale))
-    lft = int(round(int(k[0]) * scale))
-    tp = int(round(int(k[1]) * scale))
-    b.rect = ( lft, tp, w, h)
-    apply_animation(b,keys,w,h, reverseanimation)
-    keycount += 1        
-
-
-
-  for i,b in enumerate(reversed(buttons[5])):
-    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
-  for i,b in enumerate(reversed(buttons[4])):
-    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
-  for i,b in enumerate(reversed(buttons[3])):
-    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
-  for i,b in enumerate(reversed(buttons[2])):
-    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
-  for i,b in enumerate(reversed(buttons[1])):
-    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
-  for i,b in enumerate(reversed(buttons[0])):
-    b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
 
   draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS".format(
                            clock.get_fps(), " "*5, playtime), windoww, windowh)

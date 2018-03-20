@@ -159,7 +159,7 @@ namespace imagecut
                 clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + keyInColumn + ".png"));
                 clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + keyInColumn + "_shift.png"));
                 rects.Add(rect);
-                var initOffset = (row[0].WidthMultiplier * keywidth) + (row[0].XGapMultiplier * (keyspacinghorizontal * 2));
+                var initOffset = (keywidth) + (keyspacinghorizontal * 2);
 
                 foreach (var key in row)
                 {
