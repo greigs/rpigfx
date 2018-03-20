@@ -150,16 +150,16 @@ namespace imagecut
                 int keyInColumn = 0;
 
                 var prevWidth = startWidth + row.Take(keyInColumn).Sum(x =>
-                                    (x.WidthMultiplier * keywidth) + (x.XGapMultiplier * keyspacinghorizontal));
+                                    ( keywidth) + keyspacinghorizontal);
                 var xPoint = prevWidth;
                 var yPoint = startHeight + keyInfos.Take(rowNum).Sum(y => keyheight + y.First().HeightGapMultiplier * keyspacingvertical);  //rowNum * (keyheight + keyspacingvertical);
-                var rect = new RectangleF(xPoint, yPoint, keywidth * row[0].WidthMultiplier, keyheight);
+                var rect = new RectangleF(xPoint, yPoint, keywidth, keyheight);
                 var clone = img.Clone();
                 clone.Mutate(x => x.Crop(new Rectangle((int)rect.Left, (int)rect.Top, (int)rect.Width, (int)rect.Height)));
                 clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + keyInColumn + ".png"));
                 clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + keyInColumn + "_shift.png"));
                 rects.Add(rect);
-                var initOffset = (keywidth) + (keyspacinghorizontal * 2);
+                var initOffset = keywidth + keyspacinghorizontal * 2;
 
                 foreach (var key in row)
                 {
