@@ -341,25 +341,7 @@ while(True):
   screenPrescaled.fill(0)
   
   lft = 0
-  top = 0
-  leftpadding = 0
-  spacinghor = 20 
-  spacingver = 30 
-  normalheight = 60
-  normalwidth = 60 
-  topheight = 60
-  topwidth = 60
-  row2key0w = 60
-  row2key13spacing = 60
-  row2key13w = 100
-  row3key0w = 90
-  row3key13w = 130 
-  row4key0w = 110 
-  row4key13spacing = 40
-  row4key13w = 90
-  row5key0w = 70 
-  row6key0w = 110 
-  row6key3w = 403 
+
   millis = ((round(time.time() * 1000)) % 1000)
   reverseanimation = (millis > 500)
   millis = millis / 1000
@@ -382,93 +364,61 @@ while(True):
     keycount += 1
     
   # Row 2
-  top = top + topheight + spacingver
-
   for i,b in enumerate(buttons[1]):
-    w = normalwidth
-    h = normalheight
-    if i == 0:
-      lft = 0
-      w = row2key0w
-    elif i == 13:
-      w = row2key13w
-      lft = ((i - 1) * (spacinghor + normalwidth)) + row2key0w + spacinghor + row2key13spacing  
-    else:
-      lft = ((i - 1) * (spacinghor + normalwidth)) + row2key0w + spacinghor
-      
-    b.rect = ( lft, top, 0, 0)
+    k = lines[keycount].split(',')
+    w = int(round( int(k[2]) * scale ))
+    h = int(round(int(k[3]) * scale))
+    lft = int(round(int(k[0]) * scale))
+    tp = int(round(int(k[1]) * scale))
+    b.rect = ( lft, tp, w, h)
     apply_animation(b,keys,w,h, reverseanimation)
+    keycount += 1  
 
   # Row 3
-  top = top + normalheight + spacingver
-
   for i,b in enumerate(buttons[2]):
-    w = normalwidth
-    h = normalheight
-    if i == 0:
-      lft = 0
-      w = row3key0w
-    elif i == 13:
-      w = row3key13w
-      lft = ((i - 1) * (spacinghor + normalwidth)) + row3key0w + spacinghor   
-    else:
-      lft = ((i - 1) * (spacinghor + normalwidth)) + row3key0w + spacinghor
-      
-    b.rect = ( lft, top, 0, 0)
+    k = lines[keycount].split(',')
+    w = int(round( int(k[2]) * scale ))
+    h = int(round(int(k[3]) * scale))
+    lft = int(round(int(k[0]) * scale))
+    tp = int(round(int(k[1]) * scale))
+    b.rect = ( lft, tp, w, h)
     apply_animation(b,keys,w,h, reverseanimation)
+    keycount += 1      
 
   # Row 4
-  top = top + normalheight + spacingver
-
   for i,b in enumerate(buttons[3]):
-    w = normalwidth
-    h = normalheight
-    if i == 0:
-      lft = 0
-      w = row4key0w  
-    elif i == 13:
-      w = row4key13w
-      lft = ((i - 1) * (spacinghor + normalwidth)) + row4key13w + spacinghor + row4key13spacing
-    else:
-      lft = ((i - 1) * (spacinghor + normalwidth)) + row4key0w + spacinghor
-      
-    b.rect = ( lft, top, 0, 0)
+    k = lines[keycount].split(',')
+    w = int(round( int(k[2]) * scale ))
+    h = int(round(int(k[3]) * scale))
+    lft = int(round(int(k[0]) * scale))
+    tp = int(round(int(k[1]) * scale))
+    b.rect = ( lft, tp, w, h)
     apply_animation(b,keys,w,h, reverseanimation)
- 
-  # Row 5
-  top = top + normalheight + spacingver
+    keycount += 1  
 
+  # Row 5
   for i,b in enumerate(buttons[4]):
-    w = normalwidth
-    h = normalheight
-    if i == 0:
-      lft = 0
-      w = row5key0w
-    else:
-      lft = ((i - 1) * (spacinghor + normalwidth)) + row5key0w + spacinghor
-      
-    b.rect = ( lft, top, 0, 0)
-    apply_animation(b,keys,w,h, reverseanimation) 
+    k = lines[keycount].split(',')
+    w = int(round( int(k[2]) * scale ))
+    h = int(round(int(k[3]) * scale))
+    lft = int(round(int(k[0]) * scale))
+    tp = int(round(int(k[1]) * scale))
+    b.rect = ( lft, tp, w, h)
+    apply_animation(b,keys,w,h, reverseanimation)
+    keycount += 1     
 
   # Row 6
-  top = top + normalheight + spacingver
-
   for i,b in enumerate(buttons[5]):
-    w = normalwidth
-    h = normalheight
-    if i == 0:
-      lft = 0
-      w = row6key0w
-    elif i == 3:
-      w = row6key3w
-      lft = ((i - 1) * (spacinghor + normalwidth)) + row6key0w + spacinghor
-    elif i > 3:
-      lft = ((i - 2) * (spacinghor + normalwidth)) + row6key0w + spacinghor + row6key3w + spacinghor
-    else:
-      lft = ((i - 1) * (spacinghor + normalwidth)) + row6key0w + spacinghor
-      
-    b.rect = ( lft, top, 0, 0)
-    apply_animation(b,keys,w,h, reverseanimation) 
+    k = lines[keycount].split(',')
+    w = int(round( int(k[2]) * scale ))
+    h = int(round(int(k[3]) * scale))
+    lft = int(round(int(k[0]) * scale))
+    tp = int(round(int(k[1]) * scale))
+    b.rect = ( lft, tp, w, h)
+    apply_animation(b,keys,w,h, reverseanimation)
+    keycount += 1        
+
+
 
   for i,b in enumerate(reversed(buttons[5])):
     b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)

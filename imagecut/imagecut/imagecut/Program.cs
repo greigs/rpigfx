@@ -149,7 +149,6 @@ namespace imagecut
                 
                 int keyInColumn = 0;
 
-                // the 
                 var prevWidth = startWidth + row.Take(keyInColumn).Sum(x =>
                                     (x.WidthMultiplier * keywidth) + (x.XGapMultiplier * keyspacinghorizontal));
                 var xPoint = prevWidth;
@@ -160,15 +159,14 @@ namespace imagecut
                 clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + keyInColumn + ".png"));
                 clone.SaveAsPng(File.OpenWrite("C:\\out\\" + rowNum + "_" + keyInColumn + "_shift.png"));
                 rects.Add(rect);
+                var initOffset = (row[0].WidthMultiplier * keywidth) + (row[0].XGapMultiplier * (keyspacinghorizontal * 2));
 
                 foreach (var key in row)
                 {
-                    prevWidth = startWidth + row.Take(keyInColumn).Sum(x =>
-                        (x.WidthMultiplier * keywidth) + (x.XGapMultiplier * keyspacinghorizontal));
+                    prevWidth = startWidth + row.Take(keyInColumn).Sum(x => (x.WidthMultiplier * keywidth) + (x.XGapMultiplier * keyspacinghorizontal));
                     xPoint = prevWidth;
                     yPoint = startHeight + keyInfos.Take(rowNum).Sum(y => keyheight + y.First().HeightGapMultiplier * keyspacingvertical);  //rowNum * (keyheight + keyspacingvertical);
-                    rect = new RectangleF(xPoint, yPoint, keywidth * key.WidthMultiplier, keyheight);
-                    rects.Add(rect);
+                    rect = new RectangleF(xPoint, yPoint, keywidth * key.WidthMultiplier, keyheight);                    
                     var r = new RectangularePolygon(rect);
                     
 
@@ -180,6 +178,10 @@ namespace imagecut
 
                     img.Mutate(x => x.Draw(new Pen<Rgba32>(Rgba32.Red, 1), r));
 
+                    // compensate for not having first key
+                    rect.X = rect.X + initOffset;
+
+                    rects.Add(rect);
                 }
 
                 rowNum++;
