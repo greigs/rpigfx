@@ -56,30 +56,29 @@ class Icon:
 # buttons[] list to assign the Icon objects (from names) to each Button.
 
 class Button:
-
   def __init__(self, **kwargs):
-    self.key      = None # the key
-    self.color    = None # Background fill color, if any
-    self.iconBg   = None # Background Icon (atop color fill)
-    self.staticBg = None # 
-    self.animating= False
-    self.iconFg   = None # Foreground Icon (atop background)
-    self.bg       = None # Background Icon name
-    self.fg       = None # Foreground Icon name
+    self.key = None # the key
+    self.color = None # Background fill color, if any
+    self.iconBg = None # Background Icon (atop color fill)
+    self.staticBg = None
+    self.animating = False
+    self.iconFg = None # Foreground Icon (atop background)
+    self.bg = None # Background Icon name
+    self.fg = None # Foreground Icon name
     self.callback = None # Callback function
-    self.value    = None # Value passed to callback
-    self.w        = None
-    self.h        = None
-    self.shift    = None
+    self.value = None # Value passed to callback
+    self.w = None
+    self.h = None
+    self.shift = None
     self.shiftimg = None
     for key, value in kwargs.iteritems():
-      if   key == 'color': self.color    = value
-      elif key == 'bg'   : self.bg       = value
-      elif key == 'fg'   : self.fg       = value
-      elif key == 'cb'   : self.callback = value
-      elif key == 'value': self.value    = value
-      elif key == 'key'  : self.key      = value
-      elif key == 'shift': self.shift    = value
+      if key == 'color': self.color = value
+      elif key == 'bg': self.bg = value
+      elif key == 'fg': self.fg = value
+      elif key == 'cb': self.callback = value
+      elif key == 'value': self.value = value
+      elif key == 'key': self.key = value
+      elif key == 'shift': self.shift = value
 
 
   def selected(self, pos):
@@ -91,7 +90,7 @@ class Button:
         (pos[1] >= y1) and (pos[1] <= y2)):
       if self.callback:
         if self.value is None: self.callback()
-        else:                  self.callback(self.value)
+        else: self.callback(self.value)
       return True
     return False
 
@@ -138,8 +137,6 @@ class Button:
 
 # Global stuff -------------------------------------------------------------
 
-screenMode      =  9      # Current screen mode; default = viewfinder
-screenModePrior = -1      # Prior screen mode (for detecting changes)
 settingMode     =  4      # Last-used settings mode (default = storage)
 storeMode       =  0      # Storage mode; default = Photos folder
 storeModePrior  = -1      # Prior storage mode (for detecting changes)
@@ -156,7 +153,7 @@ loadedKeyset    = -1
 enableFifoLoop = False
 rowNums = [15,15,15,14,15,11]
 
-shift           = False
+shift           = True
 msg             = ""
 
 #icons = [] # This list gets populated at startup
@@ -168,15 +165,15 @@ msg             = ""
 # declared for each settings screen, rather than a single reusable
 # set); trying to reuse those few elements just made for an ugly
 # tangle of code elsewhere.
-keysets = ["standard", "premiere"]
+keysets = ["standard_lc", "premiere", "photoshop"]
 
 buttons = []
 rowNum = 0
 for row in rowNums:
   thisrow = []
-  for key in range(0,row):
+  for key in range(0, row):
     butName = str(rowNum) + "_" + str(key)
-    thisrow.append(Button(bg = butName))
+    thisrow.append(Button(bg=butName))
   buttons.append(thisrow)
   rowNum += 1
 
@@ -222,7 +219,7 @@ def draw_text(screen, font, text, surfacewidth, surfaceheight):
   """
   fw, fh = font.size(text) # fw: font width,  fh: font height
   surface = font.render(text, True, (0, 0, 255))
-  # // makes integer division in python3 
+  # // makes integer division in python3
   screen.blit(surface, (0,0))
 
 def apply_animation(b,keys,w,h, reverseanimation):
@@ -262,17 +259,17 @@ size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
 if pygame.display.Info().current_h == 1366:
-  screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
+  screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN|pygame.SRCALPHA,16)
 else:
-  screen = pygame.display.set_mode((1366,768),pygame.HWSURFACE,16)
+  screen = pygame.display.set_mode((1366,768),pygame.HWSURFACE|pygame.SRCALPHA,16)
 screenPrescaled = screen
 overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA, 16)
-clock=pygame.time.Clock()
+clock = pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
 pygame.mouse.set_visible(False)
 font = pygame.font.SysFont('mono', 24, bold=True)
-pygame.display.set_caption('')
+pygame.display.set_caption('Pio One')
 
 
 # Load all icons at startup.
@@ -288,7 +285,7 @@ for iconPathLocal in keysets:
 # Main loop ----------------------------------------------------------------
 framecount = 0
 # Desired framerate in frames per second. Try out other values.              
-FPS = 4
+FPS = 5
 # How many seconds the "game" is played.
 playtime = 0.0
 loadset = False
@@ -298,8 +295,15 @@ if enableFifoLoop:
   t = Thread(target=fifoLoop)
   t.start()
 
+
 while(True):  
-  
+
+  if framecount > 0:
+    if framecount % 20 == 0:
+      selectedKeyset = 1
+    if framecount % 30 == 0:
+      selectedKeyset = 0
+
   if selectedKeyset != loadedKeyset:
     for s in buttons:        # For each screenful of buttons...
       for b in s:            #  For each button on screen...
@@ -315,9 +319,6 @@ while(True):
   else:
     loadset = False
 
-  # Do not go faster than this framerate.
-  milliseconds = clock.tick(FPS) 
-  playtime += milliseconds / 1000.0 
   keys = None
 
   framecount = framecount + 1
@@ -345,16 +346,16 @@ while(True):
   reverseanimation = (millis > 500)
   millis = millis / 1000
 
-  with open('keysets/' + keysets[0]  + '/out.txt') as f:
-    lines = [line.rstrip('\n') for line in f]
-  keycount = 0
   scale = 0.35
 
+  with open('keysets/' + keysets[selectedKeyset]  + '/out.txt') as f:
+    lines = [line.rstrip('\n') for line in f]
 
+  keycount = 0
   for row in range(6):
     for i,b in enumerate(buttons[row]):
       k = lines[keycount].split(',')
-      w = int(round( int(k[2]) * scale ))
+      w = int(round(int(k[2]) * scale ))
       h = int(round(int(k[3]) * scale))
       lft = int(round(int(k[0]) * scale))
       tp = int(round(int(k[1]) * scale))
@@ -367,17 +368,27 @@ while(True):
       b.draw(screenPrescaled, 'keysets/' + keysets[selectedKeyset], loadset)
 
 
-  draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS".format(
-                           clock.get_fps(), " "*5, playtime), windoww, windowh)
+  draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS FRAMES:{:6}".format(
+    clock.get_fps(), " "*5, playtime, framecount), windoww, windowh)
 
   #pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
   
-  
-  overlay.fill((int(pytweening.linear(millis ) * 100),int(pytweening.linear(1.0 - millis ) * 100),int(pytweening.linear(1.0 - millis ) * 50),0))
-  #screen.blit(overlay, (0,0), None, BLEND_MIN)
+
+  # fill black
+  overlay.fill(0)
+
+  # fill colour, attempt to use alpha
+  overlay.fill(
+    (int(pytweening.linear(millis ) * 55),
+    int(pytweening.linear(1.0 - millis ) * 55),
+    int(pytweening.linear(1.0 - millis ) * 55),
+    10),
+    None, BLEND_RGBA_ADD )
+  screen.blit(overlay, (0,0), None, BLEND_RGBA_SUB)
   
   pygame.display.update()
  
-
-
-  screenModePrior = screenMode
+  # Do not go faster than this framerate.
+  milliseconds = clock.tick(FPS) 
+  playtime += milliseconds / 1000.0 
+  
