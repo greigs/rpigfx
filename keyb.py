@@ -168,7 +168,7 @@ msg             = ""
 # declared for each settings screen, rather than a single reusable
 # set); trying to reuse those few elements just made for an ugly
 # tangle of code elsewhere.
-keysets = ["premier"]
+keysets = ["standard", "premiere"]
 
 buttons = []
 rowNum = 0
@@ -346,10 +346,10 @@ while(True):
   reverseanimation = (millis > 500)
   millis = millis / 1000
 
-  with open('keysets\premier\out.txt') as f:
+  with open('keysets\\' + keysets[0]  + '\out.txt') as f:
     lines = [line.rstrip('\n') for line in f]
   keycount = 0
-  scale = 0.5
+  scale = 0.3
 
 
   for row in range(6):
