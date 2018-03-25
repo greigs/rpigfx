@@ -279,9 +279,9 @@ pygame.display.set_caption('')
 # Load all icons at startup.
 for iconPathLocal in keysets:
   icons = []
-  for file in os.listdir('keysets\\' + iconPathLocal):
+  for file in os.listdir('keysets/' + iconPathLocal):
     if fnmatch.fnmatch(file, '*.png'):
-      icons.append(Icon(file.split('.')[0], 'keysets\\' + iconPathLocal))
+      icons.append(Icon(file.split('.')[0], 'keysets/' + iconPathLocal))
   iconsets.append(icons)
 
 # Assign Icons to Buttons, now that they're loaded
@@ -346,7 +346,7 @@ while(True):
   reverseanimation = (millis > 500)
   millis = millis / 1000
 
-  with open('keysets\\' + keysets[0]  + '\out.txt') as f:
+  with open('keysets/' + keysets[0]  + '/out.txt') as f:
     lines = [line.rstrip('\n') for line in f]
   keycount = 0
   scale = 0.3
@@ -365,7 +365,7 @@ while(True):
     
   for row in range(5, -1, -1):
     for i,b in enumerate(reversed(buttons[row])):
-      b.draw(screenPrescaled, 'keysets\\' + keysets[selectedKeyset], loadset)
+      b.draw(screenPrescaled, 'keysets/' + keysets[selectedKeyset], loadset)
 
 
   draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS".format(
