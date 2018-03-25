@@ -261,13 +261,12 @@ pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
-if pygame.display.Info().current_h == 480:
+if pygame.display.Info().current_h == 1366:
   screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN,16)
 else:
-  screen = pygame.display.set_mode((1300,540),pygame.HWSURFACE,16)
+  screen = pygame.display.set_mode((1366,768),pygame.HWSURFACE,16)
 screenPrescaled = screen
 overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA, 16)
-#screenPrescaled = pygame.Surface((800, 480), flags=pygame.HWSURFACE, depth=16)
 clock=pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
@@ -349,7 +348,7 @@ while(True):
   with open('keysets/' + keysets[0]  + '/out.txt') as f:
     lines = [line.rstrip('\n') for line in f]
   keycount = 0
-  scale = 0.3
+  scale = 0.35
 
 
   for row in range(6):
