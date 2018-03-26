@@ -157,9 +157,9 @@ msg             = ""
 # declared for each settings screen, rather than a single reusable
 # set); trying to reuse those few elements just made for an ugly
 # tangle of code elsewhere.
-keysets = ["standard_lc", "premiere", "photoshop"]
-keysetScales = [0.35, 0.344, 0.35]
-keysetXOffsets = [0, -20, 0]
+keysets = ["standard_lc", "premiere", "photoshop", "standard"]
+keysetScales = [0.35, 0.344, 0.35, 0.35]
+keysetXOffsets = [0, -20, 0, 0]
 
 buttons = []
 rowNum = 0
@@ -323,15 +323,24 @@ while True:
         sys.exit()
       if keys[pygame.K_LSHIFT]:
         shift = True
+        selectedKeyset = 3
+      if keys[pygame.K_z]:
+        selectedKeyset = 0
+      if keys[pygame.K_x]:
+        selectedKeyset = 1
+      if keys[pygame.K_c]:
+        selectedKeyset = 2        
     elif event.type is KEYUP:
       keys = pygame.key.get_pressed()
       if not keys[pygame.K_LSHIFT]:
-        shift = False
-  
+        if shift:
+          shift = False
+          selectedKeyset = 0
+
   keys = pygame.key.get_pressed()
   # Overlay buttons on display and update
   screenPrescaled.fill(0)
-  
+
   lft = 0
 
   millis = ((round(time.time() * 1000)) % 1000)
@@ -342,9 +351,9 @@ while True:
 
   keycount = 0
   for row in range(6):
-    for i,b in enumerate(buttons[row]):
+    for i, b in enumerate(buttons[row]):
       k = lines[selectedKeyset][keycount].split(',')
-      w = int(round(int(k[2]) * scale ))
+      w = int(round(int(k[2]) * scale))
       h = int(round(int(k[3]) * scale))
       lft = int(round(int(k[0]) * scale))
       tp = int(round((int(k[1]) + keysetXOffsets[selectedKeyset]) * scale))
@@ -352,9 +361,9 @@ while True:
       b.key = int(k[4])
       apply_animation(b, keys, w, h, reverseanimation)
       keycount += 1
-    
+
   for row in range(5, -1, -1):
-    for i,b in enumerate(reversed(buttons[row])):
+    for i, b in enumerate(reversed(buttons[row])):
       b.draw(screenPrescaled, 'keysets/' + keysets[selectedKeyset], loadset)
 
   draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS FRAMES:{:6}".format(
