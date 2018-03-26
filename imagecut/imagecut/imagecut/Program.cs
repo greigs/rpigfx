@@ -86,7 +86,7 @@ namespace imagecut
             var basePath = "C:\\repo\\rpigfx\\keysets\\";
             var extension = ".png";
 
-            bool saveKeys = true;
+            bool saveKeys = false;
 
             const float gapAfterHKeyRow1 = 2.3f;
             const float gapAfterHKeyNormal = 2.3f;
@@ -129,16 +129,16 @@ namespace imagecut
                     {
                         new KeyInfo("h2"){XGapMultiplier = gapAfterHKeyNormal, HeightGapMultiplier = 1.2f},
                         new KeyInfo("tilde") {},
-                        new KeyInfo("1"),
-                        new KeyInfo("2"),
-                        new KeyInfo("3"),
-                        new KeyInfo("4"),
-                        new KeyInfo("5"),
-                        new KeyInfo("6"),
-                        new KeyInfo("7"),
-                        new KeyInfo("8"),
-                        new KeyInfo("9"),
-                        new KeyInfo("0"),
+                        new KeyInfo("1", 49),
+                        new KeyInfo("2", 50),
+                        new KeyInfo("3", 51),
+                        new KeyInfo("4", 52),
+                        new KeyInfo("5", 53),
+                        new KeyInfo("6", 54),
+                        new KeyInfo("7", 55),
+                        new KeyInfo("8", 56),
+                        new KeyInfo("9", 57),
+                        new KeyInfo("0", 48),
                         new KeyInfo("minus"),
                         new KeyInfo("plus") {XGapMultiplier = 1.2f},
                         new KeyInfo("delete") {WidthMultiplier = 1.52f}
@@ -152,16 +152,16 @@ namespace imagecut
                             XGapMultiplier = 1.65f,
                            
                         },
-                        new KeyInfo("q", 99),
-                        new KeyInfo("w", 100),
+                        new KeyInfo("q", 113),
+                        new KeyInfo("w", 119),
                         new KeyInfo("e", 101),
-                        new KeyInfo("r", 102),
-                        new KeyInfo("t"),
-                        new KeyInfo("y"),
-                        new KeyInfo("u"),
-                        new KeyInfo("i"),
-                        new KeyInfo("o"),
-                        new KeyInfo("p"),
+                        new KeyInfo("r", 114),
+                        new KeyInfo("t", 116),
+                        new KeyInfo("y", 121),
+                        new KeyInfo("u", 117),
+                        new KeyInfo("i", 105),
+                        new KeyInfo("o", 111),
+                        new KeyInfo("p", 112),
                         new KeyInfo("leftsquarebracket"),
                         new KeyInfo("rightsquarebracket"),
                         new KeyInfo("backslash")
