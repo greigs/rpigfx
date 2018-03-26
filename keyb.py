@@ -281,7 +281,7 @@ for iconPathLocal in keysets:
 # Main loop ----------------------------------------------------------------
 framecount = 0
 # Desired framerate in frames per second. Try out other values.              
-FPS = 1
+FPS = 10
 # How many seconds the "game" is played.
 playtime = 0.0
 loadset = False
