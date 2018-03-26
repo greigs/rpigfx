@@ -86,7 +86,7 @@ namespace imagecut
             var basePath = "C:\\repo\\rpigfx\\keysets\\";
             var extension = ".png";
 
-            bool saveKeys = false;
+            bool saveKeys = true;
 
             const float gapAfterHKeyRow1 = 2.3f;
             const float gapAfterHKeyNormal = 2.3f;
@@ -235,8 +235,7 @@ namespace imagecut
                     var xPoint = startWidth;
                     var yPoint = startHeight + keyInfos.Take(rowNum)
                                      .Sum(y => keyheight + y.First().HeightGapMultiplier *
-                                               keyspacingvertical); //rowNum * (keyheight + keyspacingvertical);
-                    //var initOffset = keywidth + keyspacinghorizontal * 2;
+                                               keyspacingvertical); 
                     
                     foreach (var key in row)
                     {
@@ -245,7 +244,7 @@ namespace imagecut
                         xPoint = prevWidth;
                         yPoint = startHeight + keyInfos.Take(rowNum).Sum(y =>
                                      keyheight + y.First().HeightGapMultiplier *
-                                     keyspacingvertical); //rowNum * (keyheight + keyspacingvertical);
+                                     keyspacingvertical);
                         var rect = new RectangleF(xPoint, yPoint, keywidth * key.WidthMultiplier, keyheight);
                         var r = new RectangularePolygon(rect);
 
@@ -262,9 +261,6 @@ namespace imagecut
 
                         keyInColumn++;
                         img.Mutate(x => x.Draw(new Pen<Rgba32>(Rgba32.Red, 1), r));
-
-                        // compensate for not having first key
-                        //rect.X = rect.X + initOffset;
 
                         rects.Add(new MyRect(rect){Code = key.Code});
                     }

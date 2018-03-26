@@ -18,10 +18,6 @@ from subprocess import call
 from threading import Thread
 from pipes import Pipes
 
-
-
-
-
 # UI classes ---------------------------------------------------------------
 
 # Icon is a very simple bitmap class, just associates a name and a pygame
@@ -36,8 +32,6 @@ class Icon:
     self.originalbitmap = pygame.image.load(iconPathLocal + '/' + name + '.png').convert(24)
     #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
     self.bitmap = self.originalbitmap.convert(16)
-
-
 
 # Button is a simple tappable screen region.  Each has:
 #  - bounding rect ((X,Y,W,H) in pixels)
@@ -95,9 +89,9 @@ class Button:
     return False
 
   def draw(self, screen, iconPathLocal, loadSet):
-    if self.shiftimg is None and self.shift is not None:
-      self.shiftimg = pygame.image.load(iconPathLocal + '/' + self.iconBg.name.split('.')[0] + '_shift.png').convert(16)
-      self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
+    #if self.shiftimg is None and self.shift is not None:
+      #self.shiftimg = pygame.image.load(iconPathLocal + '/' + self.iconBg.name.split('.')[0] + '_shift.png').convert(16)
+      #self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
     if self.color:
       screen.fill(self.color, self.rect)
     if self.iconBg:
@@ -116,9 +110,7 @@ class Button:
     if self.iconFg:
       img = pygame.transform.scale(self.iconFg.bitmap, (self.w,self.h))
       #img.set_alpha(255)
-      screen.blit(img,
-        (self.rect[0],
-         self.rect[1]))
+      screen.blit(img, (self.rect[0], self.rect[1]))
 
   def setBg(self, name):
     if name is None:
@@ -197,9 +189,6 @@ def fifoLoop():
       print(msg)
       pipes.reset_msg()
 
-
-
-
 # Scan files in a directory, locating JPEGs with names matching the
 # software's convention (IMG_XXXX.JPG), returning a tuple with the
 # lowest and highest indices (or None if no matching files).
@@ -225,18 +214,18 @@ def draw_text(screen, font, text, surfacewidth, surfaceheight):
   screen.blit(surface, (0,0))
 
 def apply_animation(b,keys,w,h, reverseanimation):
-    if keys is not None and b.key is not None and len(keys) > 0 and keys[b.key]:
-      b.animating = True
-      if reverseanimation:
-        b.w = w + int(pytweening.linear(1.0 - millis) * 100)
-        b.h = h + int(pytweening.linear(1.0 - millis) * 100)      
-      else:
-        b.h = h + int(pytweening.linear((millis)) * 100)
-        b.w = w + int(pytweening.linear((millis)) * 100)
+  if keys is not None and b.key is not None and len(keys) > 0 and keys[b.key]:
+    b.animating = True
+    if reverseanimation:
+      b.w = w + int(pytweening.linear(1.0 - millis) * 100)
+      b.h = h + int(pytweening.linear(1.0 - millis) * 100)
     else:
-      b.h = h
-      b.w = w
-      b.animating = False
+      b.h = h + int(pytweening.linear((millis)) * 100)
+      b.w = w + int(pytweening.linear((millis)) * 100)
+  else:
+    b.h = h
+    b.w = w
+    b.animating = False
 
 # Initialization -----------------------------------------------------------
 
@@ -261,11 +250,11 @@ size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
 pygame.mixer.quit()
 if pygame.display.Info().current_h == 1366:
-  screen = pygame.display.set_mode(size,pygame.HWSURFACE|pygame.FULLSCREEN|pygame.SRCALPHA,16)
+  screen = pygame.display.set_mode(size, pygame.HWSURFACE|pygame.FULLSCREEN, 16)
 else:
-  screen = pygame.display.set_mode((1366,768),pygame.HWSURFACE|pygame.SRCALPHA,16)
+  screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE, 16)
 screenPrescaled = screen
-overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA, 16)
+#overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA, 16)
 clock = pygame.time.Clock()
 windoww = pygame.display.Info().current_w
 windowh = pygame.display.Info().current_h
@@ -275,36 +264,37 @@ pygame.display.set_caption('Pio One')
 
 
 # Load all icons at startup.
+lines = []
 for iconPathLocal in keysets:
   icons = []
   for file in os.listdir('keysets/' + iconPathLocal):
     if fnmatch.fnmatch(file, '*.png'):
       icons.append(Icon(file.split('.')[0], 'keysets/' + iconPathLocal))
   iconsets.append(icons)
+  with open('keysets/' + iconPathLocal  + '/out.txt') as f:
+    lines.append([line.rstrip('\n') for line in f])
 
 # Assign Icons to Buttons, now that they're loaded
 
 # Main loop ----------------------------------------------------------------
 framecount = 0
 # Desired framerate in frames per second. Try out other values.              
-FPS = 5
+FPS = 30
 # How many seconds the "game" is played.
 playtime = 0.0
 loadset = False
-
 
 if enableFifoLoop:
   t = Thread(target=fifoLoop)
   t.start()
 
+while True:
 
-while(True):  
-
-  if framecount > 0:
-    if framecount % 20 == 0:
-      selectedKeyset = 1
-    if framecount % 30 == 0:
-      selectedKeyset = 2
+  #if framecount > 0:
+  #  if framecount % 20 == 0:
+  #    selectedKeyset = 1
+  #  if framecount % 30 == 0:
+  #    selectedKeyset = 2
 
   if selectedKeyset != loadedKeyset:
     for s in buttons:        # For each screenful of buttons...
@@ -350,48 +340,42 @@ while(True):
 
   scale = keysetScales[selectedKeyset]
 
-  with open('keysets/' + keysets[selectedKeyset]  + '/out.txt') as f:
-    lines = [line.rstrip('\n') for line in f]
-
   keycount = 0
   for row in range(6):
     for i,b in enumerate(buttons[row]):
-      k = lines[keycount].split(',')
+      k = lines[selectedKeyset][keycount].split(',')
       w = int(round(int(k[2]) * scale ))
       h = int(round(int(k[3]) * scale))
       lft = int(round(int(k[0]) * scale))
       tp = int(round((int(k[1]) + keysetXOffsets[selectedKeyset]) * scale))
-      b.rect = ( lft, tp, w, h)
+      b.rect = (lft, tp, w, h)
       b.key = int(k[4])
-      apply_animation(b,keys,w,h, reverseanimation)
+      apply_animation(b, keys, w, h, reverseanimation)
       keycount += 1
     
   for row in range(5, -1, -1):
     for i,b in enumerate(reversed(buttons[row])):
       b.draw(screenPrescaled, 'keysets/' + keysets[selectedKeyset], loadset)
 
-
   draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS FRAMES:{:6}".format(
     clock.get_fps(), " "*5, playtime, framecount), windoww, windowh)
 
-  #pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)
-  
+  #pygame.transform.scale(screenPrescaled, (windoww, windowh), screen)  
 
   # fill black
-  overlay.fill(0)
+  #overlay.fill(0)
 
   # fill colour, attempt to use alpha
-  overlay.fill(
+  screen.fill(
     (int(pytweening.linear(millis ) * 55),
     int(pytweening.linear(1.0 - millis ) * 55),
     int(pytweening.linear(1.0 - millis ) * 55),
     10),
-    None, BLEND_RGBA_ADD )
-  screen.blit(overlay, (0,0), None, BLEND_RGBA_SUB)
+    None, BLEND_RGB_SUB )
+  #screen.blit(overlay, (0,0), None, BLEND_RGBA_SUB)
   
   pygame.display.update()
  
   # Do not go faster than this framerate.
   milliseconds = clock.tick(FPS) 
-  playtime += milliseconds / 1000.0 
-  
+  playtime += milliseconds / 1000.0
