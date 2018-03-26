@@ -158,8 +158,8 @@ msg             = ""
 # set); trying to reuse those few elements just made for an ugly
 # tangle of code elsewhere.
 keysets = ["standard_lc", "premiere", "photoshop", "standard"]
-#keysetScales = [0.35, 0.344, 0.35, 0.35]
-keysetScales = [0.2, 0.2, 0.2, 0.2]
+keysetScales = [0.35, 0.344, 0.35, 0.35]
+#keysetScales = [0.2, 0.2, 0.2, 0.2]
 keysetXOffsets = [0, -20, 0, 0]
 
 buttons = []
@@ -281,7 +281,7 @@ for iconPathLocal in keysets:
 # Main loop ----------------------------------------------------------------
 framecount = 0
 # Desired framerate in frames per second. Try out other values.              
-FPS = 5
+FPS = 4
 # How many seconds the "game" is played.
 playtime = 0.0
 loadset = False
