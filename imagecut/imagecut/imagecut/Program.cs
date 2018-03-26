@@ -12,14 +12,16 @@ namespace imagecut
     class KeyInfo
     {
 
-        public KeyInfo(string name)
+        public KeyInfo(string name, int code = -1)
         {
+            Code = code;
             Name = name;
             WidthMultiplier = 1.0f;
             XGapMultiplier = 1.0f;
             HeightGapMultiplier = 1.0f;
         }
 
+        public int Code { get; set; }
         public string Name { get; set;}
         public float WidthMultiplier { get; set; }
         public float XGapMultiplier { get; set; }
@@ -150,10 +152,10 @@ namespace imagecut
                             XGapMultiplier = 1.65f,
                            
                         },
-                        new KeyInfo("q"),
-                        new KeyInfo("w"),
-                        new KeyInfo("e"),
-                        new KeyInfo("r"),
+                        new KeyInfo("q", 99),
+                        new KeyInfo("w", 100),
+                        new KeyInfo("e", 101),
+                        new KeyInfo("r", 102),
                         new KeyInfo("t"),
                         new KeyInfo("y"),
                         new KeyInfo("u"),
@@ -224,7 +226,7 @@ namespace imagecut
                     }
                 };
 
-                List<RectangleF> rects = new List<RectangleF>();
+                List<MyRect> rects = new List<MyRect>();
                 
                 int rowNum = 0;
                 foreach (var row in keyInfos)
@@ -264,7 +266,7 @@ namespace imagecut
                         // compensate for not having first key
                         //rect.X = rect.X + initOffset;
 
-                        rects.Add(rect);
+                        rects.Add(new MyRect(rect){Code = key.Code});
                     }
 
                     rowNum++;
@@ -278,9 +280,22 @@ namespace imagecut
 
                 File.WriteAllLines(workingDir + "out.txt",
                     rects.Select(x =>
-                        $"{Math.Round(x.X)},{Math.Round(x.Y)},{Math.Round(x.Width)},{Math.Round(x.Height)}"));
+                        $"{Math.Round(x.R.X)},{Math.Round(x.R.Y)},{Math.Round(x.R.Width)},{Math.Round(x.R.Height)},{x.Code}"));
 
             }
         }
+    }
+
+    internal class MyRect
+    {
+        public RectangleF R { get; }
+
+        public int Code { get; set; }
+
+        internal MyRect(RectangleF r)
+        {
+            R = r;
+        }
+
     }
 }

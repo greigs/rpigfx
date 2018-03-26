@@ -166,6 +166,8 @@ msg             = ""
 # set); trying to reuse those few elements just made for an ugly
 # tangle of code elsewhere.
 keysets = ["standard_lc", "premiere", "photoshop"]
+keysetScales = [0.35, 0.344, 0.35]
+keysetXOffsets = [0, -20, 0]
 
 buttons = []
 rowNum = 0
@@ -226,11 +228,11 @@ def apply_animation(b,keys,w,h, reverseanimation):
     if keys is not None and b.key is not None and len(keys) > 0 and keys[b.key]:
       b.animating = True
       if reverseanimation:
-        b.w = w + int(pytweening.linear(1.0 - millis ) * 100)
-        b.h = h + int(pytweening.linear(1.0 - millis ) * 100)      
+        b.w = w + int(pytweening.linear(1.0 - millis) * 100)
+        b.h = h + int(pytweening.linear(1.0 - millis) * 100)      
       else:
-        b.w = w + int(pytweening.linear( (millis )) * 100)
-        b.h = h + int(pytweening.linear((millis )) * 100)
+        b.h = h + int(pytweening.linear((millis)) * 100)
+        b.w = w + int(pytweening.linear((millis)) * 100)
     else:
       b.h = h
       b.w = w
@@ -302,7 +304,7 @@ while(True):
     if framecount % 20 == 0:
       selectedKeyset = 1
     if framecount % 30 == 0:
-      selectedKeyset = 0
+      selectedKeyset = 2
 
   if selectedKeyset != loadedKeyset:
     for s in buttons:        # For each screenful of buttons...
@@ -346,7 +348,7 @@ while(True):
   reverseanimation = (millis > 500)
   millis = millis / 1000
 
-  scale = 0.35
+  scale = keysetScales[selectedKeyset]
 
   with open('keysets/' + keysets[selectedKeyset]  + '/out.txt') as f:
     lines = [line.rstrip('\n') for line in f]
@@ -358,8 +360,9 @@ while(True):
       w = int(round(int(k[2]) * scale ))
       h = int(round(int(k[3]) * scale))
       lft = int(round(int(k[0]) * scale))
-      tp = int(round(int(k[1]) * scale))
+      tp = int(round((int(k[1]) + keysetXOffsets[selectedKeyset]) * scale))
       b.rect = ( lft, tp, w, h)
+      b.key = int(k[4])
       apply_animation(b,keys,w,h, reverseanimation)
       keycount += 1
     
