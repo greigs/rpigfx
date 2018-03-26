@@ -281,7 +281,7 @@ for iconPathLocal in keysets:
 # Main loop ----------------------------------------------------------------
 framecount = 0
 # Desired framerate in frames per second. Try out other values.              
-FPS = 10
+FPS = 5
 # How many seconds the "game" is played.
 playtime = 0.0
 loadset = False
@@ -377,12 +377,12 @@ while True:
   #overlay.fill(0)
 
   # fill colour, attempt to use alpha
-  screen.fill(
-    (int(pytweening.linear(millis ) * 55),
-    int(pytweening.linear(1.0 - millis ) * 55),
-    int(pytweening.linear(1.0 - millis ) * 55),
-    10),
-    None, BLEND_RGB_SUB )
+  #screen.fill(
+  #  (int(pytweening.linear(millis ) * 55),
+  #  int(pytweening.linear(1.0 - millis ) * 55),
+  #  int(pytweening.linear(1.0 - millis ) * 55),
+  #  10),
+  #  None, BLEND_RGB_SUB )
   #screen.blit(overlay, (0,0), None, BLEND_RGBA_SUB)
   
   pygame.display.update()
