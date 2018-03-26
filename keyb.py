@@ -252,10 +252,10 @@ pygame.init()
 pygame.mixer.quit()
 if pygame.display.Info().current_h == 1366:
   #screen = pygame.display.set_mode(size, pygame.HWSURFACE|pygame.FULLSCREEN, 16)
-  screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE, 16)
+  screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE|pygame.FULLSCREEN, 16)
 else:
   #screen = pygame.display.set_mode((640, 480), pygame.HWSURFACE, 16)
-  screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE, 16)
+  screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE|pygame.FULLSCREEN, 16)
 screenPrescaled = screen
 #overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA, 16)
 clock = pygame.time.Clock()
