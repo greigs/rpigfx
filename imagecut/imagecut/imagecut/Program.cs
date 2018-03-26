@@ -91,6 +91,7 @@ namespace imagecut
             const float gapAfterHKeyRow1 = 2.3f;
             const float gapAfterHKeyNormal = 2.3f;
             const float row1xgap = 1.165f;
+            const float scaleOut = 0.4f;
             
             foreach (var layout in layoutsToProcess)
             {
@@ -254,6 +255,7 @@ namespace imagecut
                             clone.Mutate(x =>
                                 x.Crop(new Rectangle((int) rect.Left, (int) rect.Top, (int) rect.Width,
                                     (int) rect.Height)));
+                            clone.Mutate(x => x.Resize((int) (rect.Width * scaleOut), (int) (rect.Height * scaleOut)));
                             clone.SaveAsPng(File.OpenWrite(workingDir + rowNum + "_" + (keyInColumn) + ".png"));
                             clone.SaveAsPng(
                                 File.OpenWrite(workingDir + rowNum + "_" + (keyInColumn) + "_shift.png"));
