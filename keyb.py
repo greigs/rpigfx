@@ -158,7 +158,8 @@ msg             = ""
 # set); trying to reuse those few elements just made for an ugly
 # tangle of code elsewhere.
 keysets = ["standard_lc", "premiere", "photoshop", "standard"]
-keysetScales = [0.35, 0.344, 0.35, 0.35]
+#keysetScales = [0.35, 0.344, 0.35, 0.35]
+keysetScales = [0.2, 0.2, 0.2, 0.2]
 keysetXOffsets = [0, -20, 0, 0]
 
 buttons = []
@@ -252,7 +253,8 @@ pygame.mixer.quit()
 if pygame.display.Info().current_h == 1366:
   screen = pygame.display.set_mode(size, pygame.HWSURFACE|pygame.FULLSCREEN, 16)
 else:
-  screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE, 16)
+  screen = pygame.display.set_mode((640, 480), pygame.HWSURFACE, 16)
+  #screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE, 16)
 screenPrescaled = screen
 #overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA, 16)
 clock = pygame.time.Clock()
@@ -329,7 +331,7 @@ while True:
       if keys[pygame.K_x]:
         selectedKeyset = 1
       if keys[pygame.K_c]:
-        selectedKeyset = 2        
+        selectedKeyset = 2
     elif event.type is KEYUP:
       keys = pygame.key.get_pressed()
       if not keys[pygame.K_LSHIFT]:
