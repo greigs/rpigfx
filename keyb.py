@@ -1,5 +1,4 @@
 import atexit
-import cPickle as pickle
 import errno
 import fnmatch
 import io
@@ -21,24 +20,11 @@ from button import Button
 from icon import Icon
 
 # Global stuff -------------------------------------------------------------
-
-settingMode     =  4      # Last-used settings mode (default = storage)
-storeMode       =  0      # Storage mode; default = Photos folder
-storeModePrior  = -1      # Prior storage mode (for detecting changes)
-sizeMode        =  0      # Image size; default = Large
-fxMode          =  0      # Image effect; default = Normal
-isoMode         =  0      # ISO settingl default = Auto
-#iconPath        = 'icons' # Subdirectory containing UI bitmaps (PNG format)
-saveIdx         = -1      # Image index for saving (-1 = none set yet)
-loadIdx         = -1      # Image index for loading
-scaled          = None    # pygame Surface w/last-loaded image
-global selectedKeyset
 selectedKeyset = 0
 loadedKeyset    = -1
 enableFifoLoop = False
 rowNums = [15,15,15,14,15,11]
-
-shift           = True
+shift           = False
 msg             = ""
 
 #icons = [] # This list gets populated at startup
@@ -79,32 +65,14 @@ def fifoLoop():
         else:
           selectedKeyset = 1
       msg = pipes.msg
-      print(msg)
+      print msg
       pipes.reset_msg()
 
-# Scan files in a directory, locating JPEGs with names matching the
-# software's convention (IMG_XXXX.JPG), returning a tuple with the
-# lowest and highest indices (or None if no matching files).
-def imgRange(path):
-  min = 9999
-  max = 0
-  try:
-    for file in os.listdir(path):
-      if fnmatch.fnmatch(file, 'IMG_[0-9][0-9][0-9][0-9].JPG'):
-        i = int(file[4:8])
-        if(i < min): min = i
-        if(i > max): max = i
-  finally:
-    return None if min > max else (min, max)
-
-
 def draw_text(screen, font, text, surfacewidth, surfaceheight):
-  """Center text in window
-  """
   fw, fh = font.size(text) # fw: font width,  fh: font height
   surface = font.render(text, True, (0, 0, 255))
   # // makes integer division in python3
-  screen.blit(surface, (0,0))
+  screen.blit(surface, (0, 0))
 
 def apply_animation(b,keys,w,h, reverseanimation):
   if keys is not None and b.key is not None and len(keys) > 0 and keys[b.key]:
@@ -119,6 +87,16 @@ def apply_animation(b,keys,w,h, reverseanimation):
     b.h = h
     b.w = w
     b.animating = False
+
+def load_keysets():
+  for iconPathLocal in keysets:
+    icons = []
+    for keysetfile in os.listdir('keysets/' + iconPathLocal):
+      if fnmatch.fnmatch(keysetfile, '*.png'):
+        icons.append(Icon(keysetfile.split('.')[0], 'keysets/' + iconPathLocal))
+    iconsets.append(icons)
+    with open('keysets/' + iconPathLocal  + '/out.txt') as f:
+      lines.append([line.rstrip('\n') for line in f])
 
 # Initialization -----------------------------------------------------------
 # Init pygame and screen
@@ -143,14 +121,7 @@ pygame.display.set_caption('Pio One')
 
 # Load all icons at startup.
 lines = []
-for iconPathLocal in keysets:
-  icons = []
-  for file in os.listdir('keysets/' + iconPathLocal):
-    if fnmatch.fnmatch(file, '*.png'):
-      icons.append(Icon(file.split('.')[0], 'keysets/' + iconPathLocal))
-  iconsets.append(icons)
-  with open('keysets/' + iconPathLocal  + '/out.txt') as f:
-    lines.append([line.rstrip('\n') for line in f])
+load_keysets()
 
 # Assign Icons to Buttons, now that they're loaded
 
@@ -167,13 +138,6 @@ if enableFifoLoop:
   t.start()
 
 while True:
-
-  #if framecount > 0:
-  #  if framecount % 20 == 0:
-  #    selectedKeyset = 1
-  #  if framecount % 30 == 0:
-  #    selectedKeyset = 2
-
   if selectedKeyset != loadedKeyset:
     for s in buttons:        # For each screenful of buttons...
       for b in s:            #  For each button on screen...
