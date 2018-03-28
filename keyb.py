@@ -16,116 +16,9 @@ import pytweening
 from pygame.locals import *
 from subprocess import call
 from threading import Thread
-from pipes import Pipes
-
-# UI classes ---------------------------------------------------------------
-
-# Icon is a very simple bitmap class, just associates a name and a pygame
-# image (PNG loaded from icons directory) for each.
-# There isn't a globally-declared fixed list of Icons.  Instead, the list
-# is populated at runtime from the contents of the 'icons' directory.
-
-class Icon:
-
-  def __init__(self, name, iconPathLocal):
-    self.name = name
-    self.originalbitmap = pygame.image.load(iconPathLocal + '/' + name + '.png').convert(24)
-    #self.bitmap = pygame.transform.smoothscale(self.originalbitmap, (self.originalbitmap.get_width(),self.originalbitmap.get_height()))
-    self.bitmap = self.originalbitmap.convert(16)
-
-# Button is a simple tappable screen region.  Each has:
-#  - bounding rect ((X,Y,W,H) in pixels)
-#  - optional background color and/or Icon (or None), always centered
-#  - optional foreground Icon, always centered
-#  - optional single callback function
-#  - optional single value passed to callback
-# Occasionally Buttons are used as a convenience for positioning Icons
-# but the taps are ignored.  Stacking order is important; when Buttons
-# overlap, lowest/first Button in list takes precedence when processing
-# input, and highest/last Button is drawn atop prior Button(s).  This is
-# used, for example, to center an Icon by creating a passive Button the
-# width of the full screen, but with other buttons left or right that
-# may take input precedence (e.g. the Effect labels & buttons).
-# After Icons are loaded at runtime, a pass is made through the global
-# buttons[] list to assign the Icon objects (from names) to each Button.
-
-class Button:
-  def __init__(self, **kwargs):
-    self.key = None # the key
-    self.color = None # Background fill color, if any
-    self.iconBg = None # Background Icon (atop color fill)
-    self.staticBg = None
-    self.animating = False
-    self.iconFg = None # Foreground Icon (atop background)
-    self.bg = None # Background Icon name
-    self.fg = None # Foreground Icon name
-    self.callback = None # Callback function
-    self.value = None # Value passed to callback
-    self.w = None
-    self.h = None
-    self.shift = None
-    self.shiftimg = None
-    for key, value in kwargs.iteritems():
-      if key == 'color': self.color = value
-      elif key == 'bg': self.bg = value
-      elif key == 'fg': self.fg = value
-      elif key == 'cb': self.callback = value
-      elif key == 'value': self.value = value
-      elif key == 'key': self.key = value
-      elif key == 'shift': self.shift = value
-
-
-  def selected(self, pos):
-    x1 = self.rect[0]
-    y1 = self.rect[1]
-    x2 = x1 + self.rect[2] - 1
-    y2 = y1 + self.rect[3] - 1
-    if ((pos[0] >= x1) and (pos[0] <= x2) and
-        (pos[1] >= y1) and (pos[1] <= y2)):
-      if self.callback:
-        if self.value is None: self.callback()
-        else: self.callback(self.value)
-      return True
-    return False
-
-  def draw(self, screen, iconPathLocal, loadSet):
-    #if self.shiftimg is None and self.shift is not None:
-      #self.shiftimg = pygame.image.load(iconPathLocal + '/' + self.iconBg.name.split('.')[0] + '_shift.png').convert(16)
-      #self.shiftimg = pygame.transform.scale(self.shiftimg, (self.w,self.h))
-    if self.color:
-      screen.fill(self.color, self.rect)
-    if self.iconBg:
-      if shift and self.shift is not None:
-        img = self.shiftimg
-      else:
-        if self.staticBg is None or loadSet:
-          self.staticBg = pygame.transform.smoothscale(self.iconBg.bitmap.convert(24), (self.w,self.h)).convert(16)
-        if self.animating:
-          img = pygame.transform.scale(self.iconBg.bitmap, (self.w,self.h))
-        else:
-          img = self.staticBg
-      #img = self.iconBg.bitmap
-      #img.set_alpha(255)
-      screen.blit(img,(self.rect[0],self.rect[1]))
-    if self.iconFg:
-      img = pygame.transform.scale(self.iconFg.bitmap, (self.w,self.h))
-      #img.set_alpha(255)
-      screen.blit(img, (self.rect[0], self.rect[1]))
-
-  def setBg(self, name):
-    if name is None:
-      self.iconBg = None
-    else:
-      for i in icons:
-        if name == i.name:
-          self.iconBg = i
-          break
-
-
-# UI callbacks -------------------------------------------------------------
-# These are defined before globals because they're referenced by items in
-# the global buttons[] list.
-
+#from pipes import Pipes
+from button import Button
+from icon import Icon
 
 # Global stuff -------------------------------------------------------------
 
@@ -159,7 +52,6 @@ msg             = ""
 # tangle of code elsewhere.
 keysets = ["standard_lc", "premiere", "photoshop", "standard"]
 keysetScales = [0.35, 0.344, 0.35, 0.35]
-#keysetScales = [0.2, 0.2, 0.2, 0.2]
 keysetXOffsets = [0, -20, 0, 0]
 
 buttons = []
@@ -229,23 +121,7 @@ def apply_animation(b,keys,w,h, reverseanimation):
     b.animating = False
 
 # Initialization -----------------------------------------------------------
-
-# Init framebuffer/touchscreen environment variables
-#os.putenv('SDL_VIDEODRIVER', 'windlib')
-#os.putenv('SDL_FBDEV'      , '/dev/fb0')
-#os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
-#os.putenv('SDL_MOUSEDEV'   , '/dev/input/touchscreen')
-
-# Get user & group IDs for file & folder creation
-# (Want these to be 'pi' or other user, not root)
-#s = os.getenv("SUDO_UID")
-#uid = int(s)
-#s = os.getenv("SUDO_GID")
-#gid = int(s) 
-
 # Init pygame and screen
-
-#os.putenv('SDL_VIDEODRIVER', 'fbcon')
 pygame.display.init()
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.init()
@@ -254,8 +130,7 @@ if pygame.display.Info().current_h == 1366:
   #screen = pygame.display.set_mode(size, pygame.HWSURFACE|pygame.FULLSCREEN, 16)
   screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE|pygame.FULLSCREEN, 16)
 else:
-  #screen = pygame.display.set_mode((640, 480), pygame.HWSURFACE, 16)
-  screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE|pygame.FULLSCREEN, 16)
+  screen = pygame.display.set_mode((1366, 768), pygame.HWSURFACE, 16)
 screenPrescaled = screen
 #overlay = pygame.Surface( screen.get_size(), pygame.SRCALPHA, 16)
 clock = pygame.time.Clock()
@@ -367,7 +242,7 @@ while True:
 
   for row in range(5, -1, -1):
     for i, b in enumerate(reversed(buttons[row])):
-      b.draw(screenPrescaled, 'keysets/' + keysets[selectedKeyset], loadset)
+      b.draw(screenPrescaled, 'keysets/' + keysets[selectedKeyset], loadset, shift)
 
   draw_text(screenPrescaled, font, "FPS: {:6.3}{}TIME: {:6.3} SECONDS FRAMES:{:6}".format(
     clock.get_fps(), " "*5, playtime, framecount), windoww, windowh)
